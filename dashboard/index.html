@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NFF — Model Integration Tool</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<link rel="icon" href="mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Palette sampled from the NFF brand proofs:
+   #194D37 forest · #1E7B54 brand green · #37AD7C mint · #D6F5E0 pale mint */
+:root{
+  --forest:#194D37;
+  --raised:#1E5B41;
+  --raised-lit:#246B4C;
+  --mint:#37AD7C;
+  --pale:#D6F5E0;
+  --pale-2:#8CC4A6;
+  --stake:#4E8A6E;
+  --wire:rgba(214,245,224,.13);
+  --wire-soft:rgba(214,245,224,.07);
+  --r:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--forest);color:var(--pale);
+  font-family:Montserrat,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  min-height:100vh;padding:clamp(26px,5vw,60px) clamp(20px,5vw,56px) 60px;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1120px;margin:0 auto}
+
+.masthead{display:flex;align-items:center;gap:20px}
+.masthead img{width:clamp(56px,7vw,76px);height:clamp(56px,7vw,76px);
+  display:block;flex:none}
+.wordmark{font-size:clamp(21px,2.7vw,29px);font-weight:700;letter-spacing:.11em;
+  text-transform:uppercase;line-height:1.15}
+.wordmark small{display:block;font-size:clamp(9.5px,1.05vw,11.5px);
+  font-weight:500;letter-spacing:.2em;color:var(--pale-2);margin-top:5px}
+.vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.lede{margin-top:26px;max-width:58ch;color:var(--pale-2);font-size:16px;
+  line-height:1.65}
+.rule{height:1px;background:var(--wire);margin-top:30px}
+
+.group{font-size:10.5px;font-weight:600;letter-spacing:.19em;
+  text-transform:uppercase;color:var(--pale-2);margin:36px 0 14px;
+  display:flex;align-items:center;gap:14px}
+.group::after{content:"";flex:1;height:1px;background:var(--wire-soft)}
+.grid{display:grid;gap:13px;
+  grid-template-columns:repeat(auto-fill,minmax(198px,1fr))}
+
+.tile{position:relative;display:flex;flex-direction:column;min-height:174px;
+  padding:18px;background:var(--raised);border:1px solid var(--wire);
+  border-radius:var(--r);text-decoration:none;color:inherit;
+  transition:background .18s ease,border-color .18s ease,transform .18s ease}
+a.tile:hover,a.tile:focus-visible{background:var(--raised-lit);
+  border-color:rgba(55,173,124,.55);transform:translateY(-2px)}
+a.tile:focus-visible{outline:2px solid var(--mint);outline-offset:3px}
+.tile.is-planned{opacity:.68;cursor:default;background:rgba(30,91,65,.55)}
+
+.icon{width:46px;height:46px;color:var(--mint);stroke:currentColor;
+  stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round;
+  transition:color .18s ease,transform .18s ease}
+a.tile:hover .icon{color:var(--pale);transform:scale(1.06)}
+.tile.is-planned .icon{color:var(--stake)}
+
+.t-title{margin-top:auto;padding-top:18px;font-size:17px;font-weight:600;
+  letter-spacing:-.008em;line-height:1.3}
+.t-meta{margin-top:8px;font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:12px;letter-spacing:.04em;color:var(--pale-2);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+footer{margin-top:50px;padding-top:22px;border-top:1px solid var(--wire);
+  color:var(--pale-2);display:flex;gap:48px;flex-wrap:wrap;
+  align-items:flex-start}
+footer h2{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;
+  font-weight:500;letter-spacing:.17em;text-transform:uppercase;
+  color:var(--stake);margin-bottom:12px}
+.start{flex:1 1 340px}
+.start ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.start li{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;
+  font-size:12.5px;line-height:1.5}
+.start span{color:var(--stake)}
+footer a{color:var(--pale);text-decoration:none;
+  border-bottom:1px solid var(--wire)}
+footer a:hover{border-bottom-color:var(--mint)}
+.caveat{flex:1 1 290px;max-width:420px;font-size:12.5px;line-height:1.65;
+  color:var(--pale-2);border-left:2px solid var(--wire);padding-left:16px}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important}
+  a.tile:hover{transform:none}
+  a.tile:hover .icon{transform:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="masthead">
+      <img src="logo.svg" alt="">
+      <div class="wordmark">
+        NFF MIT
+        <small>Model Integration Tool</small>
+      </div>
+    </div>
+
+    <h1 class="vh">Model Integration Tool</h1>
+    <p class="lede">
+      How North Foster Farm earns a profit in 2027, built from the ground
+      up: what every activity costs in time, what every bird earns, and
+      what has to be true for two people to draw a wage. Every figure
+      traces to the thing that measured it, and every one of them can be
+      changed to see what moves.
+    </p>
+
+    <div class="rule"></div>
+  </header>
+
+  <div class="group">Measures</div>
+  <div class="grid">
+
+    <a class="tile" href="measures/labor">
+      <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="17" r="11"/><path d="M16 11v6l4 3"/><path d="M11 3h10"/>
+      </svg>
+      <div class="t-title">Labor</div>
+      <div class="t-meta">{{labor}}</div>
+    </a>
+
+    <a class="tile" href="measures/goods">
+      <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M5 11h22l-2 16H7z"/><path d="M11 11V7a5 5 0 0 1 10 0v4"/><path d="M12 17h8"/>
+      </svg>
+      <div class="t-title">Goods</div>
+      <div class="t-meta">{{goods}}</div>
+    </a>
+
+    <a class="tile" href="measures/costs">
+      <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M7 4h18v24l-3-2-3 2-3-2-3 2-3-2-3 2z"/><path d="M12 12h8M12 18h5"/>
+      </svg>
+      <div class="t-title">Costs</div>
+      <div class="t-meta">{{costs}}</div>
+    </a>
+
+  </div>
+
+  <div class="group">The model</div>
+  <div class="grid">
+
+    <a class="tile" href="calculations/">
+      <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M9 7h14L15 16l8 9H9"/><path d="M6 25h3M6 7h3"/>
+      </svg>
+      <div class="t-title">Calculations</div>
+      <div class="t-meta">{{calculations}}</div>
+    </a>
+
+    <a class="tile" href="model/">
+      <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
+        <rect x="7" y="4" width="19" height="24" rx="2"/><path d="M11 4v24"/><path d="M15 11h7M15 16h7M15 21h4"/>
+      </svg>
+      <div class="t-title">Model</div>
+      <div class="t-meta">{{model}}</div>
+    </a>
+
+    <a class="tile" href="scenarios/">
+      <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M4 26h24"/><path d="M5 20l7-7 5 5 9-11"/><circle cx="12" cy="13" r="1.8" fill="currentColor" stroke="none"/><circle cx="17" cy="18" r="1.8" fill="currentColor" stroke="none"/>
+      </svg>
+      <div class="t-title">Scenarios</div>
+      <div class="t-meta">{{scenarios}}</div>
+    </a>
+
+  </div>
+
+  <div class="group">Reference</div>
+  <div class="grid">
+
+    <a class="tile" href="wiki/">
+      <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
+        <rect x="4" y="9" width="19" height="19" rx="2.5"/><path d="M8 5.5h19a2.5 2.5 0 0 1 2.5 2.5v19"/><path d="M9 15h9M9 20h6"/>
+      </svg>
+      <div class="t-title">Wiki</div>
+      <div class="t-meta">{{wiki}}</div>
+    </a>
+
+    <a class="tile" href="presentations/">
+      <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
+        <rect x="4" y="6" width="24" height="16" rx="2"/><path d="M16 22v5"/><path d="M11 27h10"/><path d="M10 16l4-4 3 3 5-6"/>
+      </svg>
+      <div class="t-title">Presentations</div>
+      <div class="t-meta">{{presentations}}</div>
+    </a>
+
+  </div>
+
+  <div class="group">Deferred</div>
+  <div class="grid">
+
+    <div class="tile is-planned" aria-disabled="true">
+      <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M4 26h24"/><path d="M7 26V16M14 26V10M21 26V19M28 26V6"/>
+      </svg>
+      <div class="t-title">Business plan</div>
+      <div class="t-meta">Out of scope</div>
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="start">
+      <h2>Where to start</h2>
+      <ul>
+        <li>
+          <a href="measures/labor">What the day costs</a>
+          <span>Four locked blocks, and why minutes are the wrong unit.</span>
+        </li>
+        <li>
+          <a href="measures/">Why the measures come first</a>
+          <span>Three datasets, and the object all three share.</span>
+        </li>
+      </ul>
+    </div>
+    <p class="caveat">
+      A working record, not a finished plan. The model is being rebuilt
+      from the measures up, and a figure only counts once something has
+      measured it. What is missing is named as missing.
+    </p>
+  </footer>
+
+</div>
+
+<script>
+// Opened straight off disk the tiles cannot resolve — directory URLs need
+// a server. Say so rather than letting every link 404.
+if (location.protocol === 'file:') {
+  var b = document.createElement('div');
+  b.setAttribute('role', 'alert');
+  b.style.cssText = 'position:fixed;inset:0 0 auto;z-index:9;padding:14px 20px;' +
+    'background:#D9A441;color:#17331F;font:600 13px/1.5 Montserrat,sans-serif;' +
+    'display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap';
+  b.innerHTML = 'This page needs a server — the tiles will not open from ' +
+    'the file system. Run <code style="background:rgba(0,0,0,.16);' +
+    'padding:2px 7px;border-radius:4px;font-family:ui-monospace,monospace">' +
+    'npm run serve</code> instead.';
+  document.body.prepend(b);
+  document.body.style.paddingTop = '76px';
+}
+</script>
+</body>
+</html>

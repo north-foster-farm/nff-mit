@@ -1,0 +1,9 @@
+# Netlify applies these to every response. X-Robots-Tag is the part that
+# binds: it covers assets and JSON as well as HTML, and it does not
+# depend on a crawler choosing to read robots.txt first.
+
+/*
+  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate
+  Referrer-Policy: no-referrer
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
