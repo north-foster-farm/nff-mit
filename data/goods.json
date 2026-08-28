@@ -23,7 +23,9 @@
     "shift": "downward, and it holds until real weights replace it",
     "priceNote": "The list is Pat's, adapted to a different carcass, and it is not yet a pricing strategy of NFF's own.",
     "shiftSd": 1,
-    "shiftConfidence": "assumed-low"
+    "shiftConfidence": "assumed-low",
+    "confidence": "assumed-low",
+    "confidenceNote": "Every figure on this page carries the same rating. The prices are adapted from another farm's list, and the shares are modeled from a carcass nobody has weighed, so nothing here has been observed at North Foster Farm."
   },
   "packSpec": [
     {

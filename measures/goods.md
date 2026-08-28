@@ -20,9 +20,13 @@ the bands, and that distribution is the shape of the revenue side.
 | Birds the distribution was modeled at | 7,000 |
 | Packs | 14,957 |
 | Gross revenue | $332,764 |
-| **Gross per bird** | **$47.54** |
+| **Gross per bird**<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> | **$47.54** |
 
-Every figure on this page is gross. The model applies sell-through.
+These are gross figures, and the model applies sell-through to them.
+
+Every figure on this page carries the same rating. The prices are adapted
+from another farm's list, and the shares are modeled from a carcass nobody
+has weighed, so nothing here has been observed at North Foster Farm.
 
 ## Packs
 
@@ -31,13 +35,13 @@ of the whole batch rather than of any single carcass.
 
 | Product | Pieces | Birds | Average pack |
 |---|---:|---:|---:|
-| Boneless breasts | 2 | 1 | 1.12 lb |
-| Bone-in breasts | 2 | 1 | 1.42 lb |
-| Bone-in thighs | 4 | 2 | 1.35 lb |
-| Boneless thighs | 4 | 2 | 0.94 lb |
-| Drumsticks | 6 | 3 | 1.46 lb |
-| Wings | 10 | 5 | 1.96 lb |
-| Tenders | 12 | 6 | 0.90 lb |
+| Boneless breasts | 2 | 1 | 1.12 lb<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> |
+| Bone-in breasts | 2 | 1 | 1.42 lb<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> |
+| Bone-in thighs | 4 | 2 | 1.35 lb<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> |
+| Boneless thighs | 4 | 2 | 0.94 lb<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> |
+| Drumsticks | 6 | 3 | 1.46 lb<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> |
+| Wings | 10 | 5 | 1.96 lb<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> |
+| Tenders | 12 | 6 | 0.90 lb<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> |
 
 Pack weights carry a shift of one standard deviation downward, and it holds
 until real weights replace
@@ -85,7 +89,7 @@ line up, so a share is always a share of its own product.
 | 5.00 to 5.90 | $52 | 5 | 0.4% | $260 |
 | 6.00 to 6.90 | $61 | 0 | n/a | $0 |
 | 7.00 to 7.90 | $71 | 0 | n/a | $0 |
-| **Whole chicken** |  | **1,044** | **100%** | **$38,202** |
+| **Whole chicken**<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> |  | **1,044** | **100%** | **$38,202** |
 
 ### Spatchcocked
 
@@ -100,7 +104,7 @@ line up, so a share is always a share of its own product.
 | 4.50 to 4.90 | $51 | 30 | 6.5% | $1,530 |
 | 5.00 to 5.40 | $54 | 2 | 0.5% | $108 |
 | 5.50 to 5.90 | $58 | 0 | n/a | $0 |
-| **Spatchcocked** |  | **461** | **100%** | **$19,714** |
+| **Spatchcocked**<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> |  | **461** | **100%** | **$19,714** |
 
 ### Boneless breasts
 
@@ -114,7 +118,7 @@ line up, so a share is always a share of its own product.
 | 1.50 to 1.74 | $32 | 11 | 0.2% | $352 |
 | 1.75 to 1.99 | $36 | 0 | n/a | $0 |
 | 2.00 to 2.24 | $41 | 0 | n/a | $0 |
-| **Boneless breasts** |  | **4,088** | **100%** | **$92,549** |
+| **Boneless breasts**<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> |  | **4,088** | **100%** | **$92,549** |
 
 ### Bone-in breasts
 
@@ -128,7 +132,7 @@ line up, so a share is always a share of its own product.
 | 1.50 to 1.74 | $33 | 432 | 31.6% | $14,256 |
 | 1.75 to 1.99 | $38 | 40 | 2.9% | $1,520 |
 | 2.00 to 2.24 | $42 | 1 | 0.1% | $42 |
-| **Bone-in breasts** |  | **1,367** | **100%** | **$40,729** |
+| **Bone-in breasts**<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> |  | **1,367** | **100%** | **$40,729** |
 
 ### Bone-in thighs
 
@@ -140,7 +144,7 @@ line up, so a share is always a share of its own product.
 | 1.00 to 1.49 | $17 | 430 | 89.6% | $7,310 |
 | 1.50 to 1.99 | $23 | 50 | 10.4% | $1,150 |
 | 2.00 to 2.49 | $29 | 0 | n/a | $0 |
-| **Bone-in thighs** |  | **480** | **100%** | **$8,460** |
+| **Bone-in thighs**<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> |  | **480** | **100%** | **$8,460** |
 
 ### Boneless thighs
 
@@ -152,7 +156,7 @@ line up, so a share is always a share of its own product.
 | 1.00 to 1.49 | $24 | 15 | 27.3% | $360 |
 | 1.50 to 1.99 | $33 | 0 | n/a | $0 |
 | 2.00 to 2.49 | $42 | 0 | n/a | $0 |
-| **Boneless thighs** |  | **55** | **100%** | **$960** |
+| **Boneless thighs**<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> |  | **55** | **100%** | **$960** |
 
 ### Tenders
 
@@ -163,7 +167,7 @@ line up, so a share is always a share of its own product.
 | 0.50 to 0.99 | $16 | 895 | 98.1% | $14,320 |
 | 1.00 to 1.49 | $25 | 17 | 1.9% | $425 |
 | 1.50 to 1.99 | $34 | 0 | n/a | $0 |
-| **Tenders** |  | **912** | **100%** | **$14,745** |
+| **Tenders**<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> |  | **912** | **100%** | **$14,745** |
 
 ### Drumsticks
 
@@ -175,7 +179,7 @@ line up, so a share is always a share of its own product.
 | 1.00 to 1.49 | $16 | 56 | 61.5% | $896 |
 | 1.50 to 1.99 | $23 | 35 | 38.5% | $805 |
 | 2.00 to 2.49 | $30 | 0 | n/a | $0 |
-| **Drumsticks** |  | **91** | **100%** | **$1,701** |
+| **Drumsticks**<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> |  | **91** | **100%** | **$1,701** |
 
 ### Wings
 
@@ -188,7 +192,7 @@ line up, so a share is always a share of its own product.
 | 2.00 to 2.49 | $21 | 436 | 40.3% | $9,156 |
 | 2.50 to 2.99 | $25 | 0 | n/a | $0 |
 | 3.00 to 3.49 | $29 | 0 | n/a | $0 |
-| **Wings** |  | **1,081** | **100%** | **$19,476** |
+| **Wings**<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> |  | **1,081** | **100%** | **$19,476** |
 
 ## Sold by the pack
 
@@ -197,8 +201,8 @@ than sorted into one.
 
 | Product | Pack | Price | Packs | Revenue |
 |---|---|---:|---:|---:|
-| Sausage | 0.75 lb pack | $18 | 5,330 | $95,940 |
-| Offal | 1 lb pack | $6 | 48 | $288 |
+| Sausage<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> | 0.75 lb pack | $18 | 5,330 | $95,940 |
+| Offal<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> | 1 lb pack | $6 | 48 | $288 |
 
 Sausage is priced above Pat's per-pound curve.
 

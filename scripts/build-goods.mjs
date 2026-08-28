@@ -90,9 +90,10 @@ table(
     ['Packs', commas(totalPacks)],
     ['Gross revenue', money(totalRevenue)],
   ],
-  ['**Gross per bird**', `**${cents(perBird)}**`],
+  [`**Gross per bird**${dec(m.confidence)}`, `**${cents(perBird)}**`],
 )
-P(`Every figure on this page is gross. The model applies sell-through.`)
+P(`These are gross figures, and the model applies sell-through to them.`)
+P(m.confidenceNote)
 
 /* ---------- pack spec ---------- */
 push('## Packs', '')
@@ -101,7 +102,9 @@ property of the whole batch rather than of any single carcass.`)
 table(
   ['Product', 'Pieces', 'Birds', 'Average pack'],
   [Ln, R, R, R],
-  g.packSpec.map((p) => [p.sku, p.pieces, p.birds, lb(p.avgPack)]),
+  g.packSpec.map((p) => [
+    p.sku, p.pieces, p.birds, `${lb(p.avgPack)}${dec(m.confidence)}`,
+  ]),
 )
 P(`Pack weights carry a shift of ${say(m.shiftSd)} standard deviation
 ${m.shift}${dec(m.shiftConfidence)}.`)
@@ -154,7 +157,7 @@ for (const s of banded) {
       b.packs ? pct(shares[i]) : 'n/a', money(b.packs * b.price),
     ]),
     [
-      `**${s.label}**`, '', `**${commas(packsOf(s))}**`, '**100%**',
+      `**${s.label}**${dec(m.confidence)}`, '', `**${commas(packsOf(s))}**`, '**100%**',
       `**${money(revenueOf(s))}**`,
     ],
   )
@@ -170,8 +173,8 @@ into one.`)
     ['Product', 'Pack', 'Price', 'Packs', 'Revenue'],
     [Ln, Ln, R, R, R],
     flat.map((s) => [
-      s.label, s.bands[0].label, money(s.bands[0].price),
-      commas(packsOf(s)), money(revenueOf(s)),
+      `${s.label}${dec(m.confidence)}`, s.bands[0].label,
+      money(s.bands[0].price), commas(packsOf(s)), money(revenueOf(s)),
     ]),
   )
   for (const s of flat) if (s.note) P(s.note)
