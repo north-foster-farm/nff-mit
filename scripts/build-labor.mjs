@@ -16,6 +16,7 @@ import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { dec } from './confidence.mjs'
 import { loadLabor, hm } from './labor-model.mjs'
+import { emitter, R, Ln, nav } from './markdown.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const M = await loadLabor()
@@ -29,40 +30,7 @@ const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
 const say = (n) => WORDS[n] ?? String(n)
 const Say = (n) => say(n)[0].toUpperCase() + say(n).slice(1)
 
-const L = []
-
-/** A paragraph, wrapped. Prose is authored as one string so the sentence
- *  reads whole in the source, and the wrapping stays mechanical. */
-const flow = (s, first, hang) => {
-  const words = s.replace(/\s+/g, ' ').trim().split(' ')
-  let line = first
-  let empty = true
-  for (const w of words) {
-    if (!empty && `${line} ${w}`.length > 76) {
-      L.push(line)
-      line = `${hang}${w}`
-    } else {
-      line = empty ? `${line}${w}` : `${line} ${w}`
-      empty = false
-    }
-  }
-  if (!empty) L.push(line)
-}
-const P = (s) => {
-  flow(s, '', '')
-  L.push('')
-}
-const LI = (s) => flow(s, '- ', '  ')
-
-/** A table. Every column is named, and a total row carries its label. */
-const table = (head, align, rows, totalRow) => {
-  L.push(`| ${head.join(' | ')} |`, `|${align.join('|')}|`)
-  for (const r of rows) L.push(`| ${r.join(' | ')} |`)
-  if (totalRow) L.push(`| ${totalRow.join(' | ')} |`)
-  L.push('')
-}
-const R = '---:'
-const Ln = '---'
+const { P, LI, table, push, text } = emitter()
 
 const { fleet, countFor, total, elapsed, overlapOf, tasksIn, blockTotal } = M
 
@@ -115,12 +83,8 @@ const moveWeekdays = d.locks.filter((k) => k.day === 'One weekday').length
 const freeWeekdays = W.weekdays - moveWeekdays
 
 /* ---------- front matter and lead ---------- */
-const nav = d.meta.nav
-L.push('---')
-L.push(`prev: { text: '${nav.prev.text}', link: '${nav.prev.link}' }`)
-L.push(`next: { text: '${nav.next.text}', link: '${nav.next.link}' }`)
-L.push('---', '')
-L.push('# Labor', '')
+push(...nav(d.meta.nav))
+push('# Labor', '')
 
 P(`**Labor** is the time the farm costs to run. It is recorded as chore
 blocks rather than as a total number of hours, because the limit that
@@ -134,7 +98,7 @@ block. The block still has to be covered, and the shape of the day is
 unchanged.`)
 
 /* ---------- daily blocks ---------- */
-L.push('## Daily blocks', '')
+push('## Daily blocks', '')
 P(`A market departure and sundown fix ${say(lockedBlocks.length)} of the
 blocks, so an ordinary day cannot be rearranged freely.`)
 table(
@@ -148,7 +112,7 @@ table(
 )
 
 /* ---------- the purge ---------- */
-L.push('## Line purge', '')
+push('## Line purge', '')
 P(`The line purge is the wait for standing water to clear before the birds
 can drink. Water in a long hose run holds heat, the wait comes at every
 pasture visit, and it does not go away without a buried line.`)
@@ -176,7 +140,7 @@ P(`Only the counted column reaches the day. The rest is real time that a
 buried line would return.`)
 
 /* ---------- coops ---------- */
-L.push('## Units', '')
+push('## Units', '')
 P(`Durations are measured against a single unit, and the counts are kept
 here rather than folded into the times.`)
 table(
@@ -190,13 +154,13 @@ tractors with a coop that holds ${U.coop600.birds} birds and the round is
 rewritten instead of multiplied.`)
 
 /* ---------- inside the blocks ---------- */
-L.push('## Inside the blocks', '')
+push('## Inside the blocks', '')
 P(`Every block breaks down into tasks, and each task names the thing it
 scales with. The count column reads from the table above.`)
 for (const b of d.blocks) {
   const ts = tasksIn(b)
   if (!ts.length) continue
-  L.push(`### ${b.name}`, '')
+  push(`### ${b.name}`, '')
   if (b.note) P(b.note)
   table(
     ['Task', 'Per unit', 'Scales with', 'Count', 'Total'],
@@ -219,7 +183,7 @@ for (const b of d.blocks) {
     if (t.steps?.length) {
       P(`The ${t.label.toLowerCase()} breaks down further.`)
       for (const s of t.steps) LI(`${s.label}, ${hm(s.minutes)}.`)
-      L.push('')
+      push('')
     }
     if (t.note) P(t.note)
   }
@@ -237,7 +201,7 @@ const shares = entRows.map(([k]) => Math.round((byEnt[k] / daily) * 100))
 const biggest = shares.indexOf(Math.max(...shares))
 shares[biggest] += 100 - shares.reduce((a, b) => a + b, 0)
 
-L.push('## Broilers and layers', '')
+push('## Broilers and layers', '')
 P(`Because every task names an enterprise, the day divides between
 broilers and layers. The split shows what the laying flock costs on an
 ordinary day, before a single egg is washed.`)
@@ -251,7 +215,7 @@ P(`Egg washing and the annual collection figure sit outside this table,
 because they are counted once a year rather than inside a block.`)
 
 /* ---------- weekly ---------- */
-L.push('## Weekly load', '')
+push('## Weekly load', '')
 P(`A week of blocks comes to ${hm(weekTotal)}, and its days are not
 identical. ${Say(moveWeekdays)} weekday carries the layer move, which
 swallows work that would otherwise stand on its own.`)
@@ -267,12 +231,12 @@ P(`An ordinary day is untouched. Absorption changes the weekly and annual
 roll-ups, where a double count would otherwise go unnoticed.`)
 
 /* ---------- move day ---------- */
-L.push('## Move day', '')
+push('## Move day', '')
 P(`Move day is the longest day in an ordinary week. The coops are towed to
 fresh grass, the fence goes with them, and the waterers are washed and
 sanitized.`)
 for (const ph of moveDay.phases) {
-  L.push(`### ${ph.label}`, '')
+  push(`### ${ph.label}`, '')
   table(
     ['Step', 'Per unit', 'Units', 'Counted', 'Absorbed'],
     [Ln, R, R, R, R],
@@ -290,7 +254,7 @@ for (const ph of moveDay.phases) {
   )
   for (const s of ph.steps) if (s.note) P(`**${s.label}.** ${s.note}`)
 }
-L.push('### Day total', '')
+push('### Day total', '')
 table(
   ['Part', 'Time'],
   [Ln, R],
@@ -308,12 +272,12 @@ because these steps happen inside another one rather than after it.`)
     const into = steps.find((x) => x.id === s.absorbedBy)
     LI(`${s.label}, inside ${into?.label.toLowerCase()}.`)
   }
-  L.push('')
+  push('')
 }
 P(`A third layer coop would add ${hm(marginal)} to move day.`)
 
 /* ---------- periodic ---------- */
-L.push('## Periodic work', '')
+push('## Periodic work', '')
 P(`The rest of the work arrives on its own schedule rather than daily.`)
 table(
   ['Activity', 'Figure', 'Cadence', 'Who'],
@@ -330,7 +294,7 @@ for (const p of d.periodic) {
 }
 
 /* ---------- locks ---------- */
-L.push('## Locked blocks', '')
+push('## Locked blocks', '')
 P(`Some blocks are settled before anyone sits down to plan a week. On a
 day off every block carries the other person's name, and there are
 ${d.blocks.length * 7} blocks in a week to name.`)
@@ -345,18 +309,18 @@ ${say(W.weekdays)}, which leaves ${say(freeWeekdays)} to carry James' day
 off, Jim's day off, and two consecutive desk days.`)
 
 /* ---------- conventions ---------- */
-L.push('## Conventions', '')
+push('## Conventions', '')
 P(d.meta.basis)
 for (const c of d.meta.conventions) LI(c)
-L.push('')
+push('')
 
 /* ---------- blank ---------- */
-L.push('## Still blank', '')
+push('## Still blank', '')
 for (const b of d.blank) LI(b)
-L.push('')
+push('')
 
 await mkdir(join(root, 'measures'), { recursive: true })
-await writeFile(join(root, 'measures', 'labor.md'), L.join('\n'))
+await writeFile(join(root, 'measures', 'labor.md'), text())
 
 const ent = Object.entries(byEnt).map(([k, m]) => `${k} ${hm(m)}`).join(', ')
 console.log('labor  → measures/labor.md')
