@@ -26,17 +26,17 @@ produces the wrong number of birds.
 
 ## Per bird
 
-These rest on documents rather than on estimates.
+Three costs follow the bird from the hatchery to the freezer.
 
 | Cost | Per bird |
 |---|---:|
 | Chick, delivered<sup class="dec d-verified" data-tip="Verified" tabindex="0">+3</sup> | $2.20 |
-| Feed<sup class="dec d-projected" data-tip="Projected" tabindex="0">P</sup> | $4.54 |
+| Feed<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> | $6.31 |
 | Processing, standard<sup class="dec d-verified" data-tip="Verified" tabindex="0">+3</sup> | $11.38 |
-| **Per bird** | **$18.12** |
+| **Per bird** | **$19.89** |
 
-Two of the three lines are invoiced. Feed is the exception, and the reason
-has its own section below.
+Two of the three are invoiced. Feed is the exception, and its own section
+says why.
 
 Sausage processing costs $16.19 a
 bird<sup class="dec d-verified" data-tip="Verified" tabindex="0">+3</sup>.
@@ -50,19 +50,13 @@ $869.45 for layer pellets, with $119.00 of shipping on either, which puts
 the rate at $0.4206 and $0.3954 a
 pound<sup class="dec d-verified" data-tip="Verified" tabindex="0">+3</sup>.
 
-Two readings of feed per bird disagree. The first is a season's spend
-divided by the birds it fed. The second is the published standard for the
-breed.
-
-| Reading | Feed per bird | Cost per bird |
-|---|---:|---:|
-| What the farm fed<sup class="dec d-projected" data-tip="Projected" tabindex="0">P</sup> | 10.8 lb | $4.54 |
-| What the breed asks<sup class="dec d-projected" data-tip="Projected" tabindex="0">P</sup> | 15 lb | $6.31 |
-| **Gap** | **4.2 lb** | **$1.77** |
-
-Closing that gap takes every bird from $18.12 to $19.89. Whether it also
-raises the weight the bird reaches, and so what it sells for, is a question
-for the [goods measure](/measures/goods).
+The quantity is the other half, and it is not invoiced. A bird is carried at
+15
+lb<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup>,
+which at that rate is $6.31 of feed. The quantity is the published standard
+for the breed. What the farm actually fed is not known, because neither the
+feed spend for a season nor the number of birds it fed was recorded, and a
+rate derived from two unrecorded figures would be an invention.
 
 The feed invoices are deliberately not read into this repository. The ruling
 was made on August 26, 2026, and it accepts a known gap instead of carrying
@@ -125,5 +119,8 @@ bill.
 
 - The list has never been built from bank and card statements. Until it is,
   nothing here can claim to be complete.
+- Feed spend for a season has never been recorded, and neither has the
+  number of birds it fed. Until one of them is, the quantity a bird eats
+  stays a published standard rather than a measurement.
 - Owner labor is unpriced. Build hours and chore hours are counted on the
   other measures and carried at nothing here.

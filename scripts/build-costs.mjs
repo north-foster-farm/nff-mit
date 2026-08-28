@@ -37,16 +37,18 @@ const Say = (n) => say(n)[0].toUpperCase() + say(n).slice(1)
  *  derived rather than recorded, because a stored rate beside a stored
  *  invoice is two numbers that can stop agreeing. */
 const perLb = (kind) => (F.pallet[kind] + F.shipping) / F.palletLb
-const feedAt = (lbs) => lbs * perLb('broiler')
-const feedActual = feedAt(F.perBirdActual)
-const feedRequired = feedAt(F.perBirdRequirement)
 
-const amountFor = (l) => (l.derived === 'feed' ? feedActual : l.amount)
+/** The rate is invoiced. The quantity is a published standard, because
+ *  what the farm actually fed cannot be recovered: neither a season's
+ *  feed spend nor the number of birds it fed was recorded, and dividing
+ *  one unrecorded figure by another produces an invention. */
+const feedPerBird = F.perBird * perLb('broiler')
+
+const amountFor = (l) => (l.derived === 'feed' ? feedPerBird : l.amount)
 const inClass = (k) => c.lines.filter((l) => l.scalesWith === k && !l.optional)
 
 const perBird = inClass('bird').filter((l) => !l.excludeFromPerBird)
 const perBirdTotal = perBird.reduce((n, l) => n + (amountFor(l) ?? 0), 0)
-const perBirdAtRequirement = perBirdTotal - feedActual + feedRequired
 const invoiced = perBird.filter((l) => l.confidence === 'verified').length
 
 const fixed = inClass('year')
@@ -91,15 +93,15 @@ table(
 
 /* ---------- per bird ---------- */
 push('## Per bird', '')
-P(`These rest on documents rather than on estimates.`)
+P(`Three costs follow the bird from the hatchery to the freezer.`)
 table(
   ['Cost', 'Per bird'],
   [Ln, R],
   perBird.map((l) => [`${l.label}${dec(l.confidence)}`, value(l)]),
   ['**Per bird**', `**${cents(perBirdTotal)}**`],
 )
-P(`${Say(invoiced)} of the ${say(perBird.length)} lines are invoiced. Feed
-is the exception, and the reason has its own section below.`)
+P(`${Say(invoiced)} of the ${say(perBird.length)} are invoiced. Feed is
+the exception, and its own section says why.`)
 if (sausage) {
   P(`${sausage.label} costs ${cents(sausage.amount)} a
 bird${dec(sausage.confidence)}. ${sausage.note}`)
@@ -112,23 +114,9 @@ ${cents(F.pallet.broiler)} for broiler mash and ${cents(F.pallet.layer)}
 for layer pellets, with ${cents(F.shipping)} of shipping on either, which
 puts the rate at ${rate(perLb('broiler'))} and ${rate(perLb('layer'))} a
 pound${dec(F.priceConfidence)}.`)
-P(F.perBirdNote)
-table(
-  ['Reading', 'Feed per bird', 'Cost per bird'],
-  [Ln, R, R],
-  [
-    [`What the farm fed${dec(F.perBirdConfidence)}`,
-      lb(F.perBirdActual), cents(feedActual)],
-    [`What the breed asks${dec(F.perBirdConfidence)}`,
-      lb(F.perBirdRequirement), cents(feedRequired)],
-  ],
-  ['**Gap**', `**${lb(F.perBirdRequirement - F.perBirdActual)}**`,
-    `**${cents(feedRequired - feedActual)}**`],
-)
-P(`Closing that gap takes every bird from ${cents(perBirdTotal)} to
-${cents(perBirdAtRequirement)}. Whether it also raises the weight the bird
-reaches, and so what it sells for, is a question for the
-[goods measure](/measures/goods).`)
+P(`The quantity is the other half, and it is not invoiced. A bird is
+carried at ${lb(F.perBird)}${dec(F.perBirdConfidence)}, which at that rate
+is ${cents(feedPerBird)} of feed. ${F.perBirdNote}`)
 P(m.invoiceRuling)
 
 /* ---------- per year ---------- */
@@ -195,8 +183,7 @@ await writeFile(join(root, 'measures', 'costs.md'), text())
 
 console.log('costs  → measures/costs.md')
 console.log(
-  `       ${cents(perBirdTotal)} per bird, ` +
-    `${cents(perBirdAtRequirement)} at the feed requirement`,
+  `       ${cents(perBirdTotal)} per bird`,
 )
 console.log(
   `       feed ${rate(perLb('broiler'))}/lb derived from the pallet`,

@@ -68,14 +68,13 @@ const grossPerBird = gRevenue / goods.meta.modeledAt
 /* ---------- costs ---------- */
 const F = costs.feed
 const perLb = (k) => (F.pallet[k] + F.shipping) / F.palletLb
-const feedActual = F.perBirdActual * perLb('broiler')
-const feedRequired = F.perBirdRequirement * perLb('broiler')
+const feedPerBird = F.perBird * perLb('broiler')
 const line = (id) => costs.lines.find((l) => l.id === id)
 const birdLines = costs.lines.filter(
   (l) => l.scalesWith === 'bird' && !l.excludeFromPerBird && !l.optional,
 )
 const costPerBird = birdLines.reduce(
-  (n, l) => n + (l.derived === 'feed' ? feedActual : l.amount), 0,
+  (n, l) => n + (l.derived === 'feed' ? feedPerBird : l.amount), 0,
 )
 const costInputs = [
   ...birdLines.map((l) => l.confidence), F.priceConfidence,
@@ -163,11 +162,6 @@ const figures = [
     inputs: costInputs, from: '/measures/costs', source: 'Costs',
     loadBearing: true, decides: 'What a bird costs',
     enters: 'subtracted from what it earns',
-  }),
-  fig({
-    id: 'F21', label: 'Cost a bird, fed to standard',
-    value: cents(costPerBird - feedActual + feedRequired),
-    inputs: costInputs, from: '/measures/costs', source: 'Costs',
   }),
   fig({
     id: 'F22', label: 'Feed, broiler mash',

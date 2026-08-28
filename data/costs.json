@@ -40,10 +40,9 @@
     },
     "priceConfidence": "verified",
     "priceNote": "The price is invoiced.",
-    "perBirdActual": 10.8,
-    "perBirdRequirement": 15,
-    "perBirdConfidence": "projected",
-    "perBirdNote": "Two readings of feed per bird disagree. The first is a season's spend divided by the birds it fed. The second is the published standard for the breed."
+    "perBird": 15,
+    "perBirdConfidence": "assumed-low",
+    "perBirdNote": "The quantity is the published standard for the breed. What the farm actually fed is not known, because neither the feed spend for a season nor the number of birds it fed was recorded, and a rate derived from two unrecorded figures would be an invention."
   },
   "lines": [
     {
@@ -58,7 +57,7 @@
       "label": "Feed",
       "scalesWith": "bird",
       "derived": "feed",
-      "confidence": "projected"
+      "confidence": "assumed-low"
     },
     {
       "id": "K03",
@@ -146,6 +145,7 @@
   ],
   "blank": [
     "The list has never been built from bank and card statements. Until it is, nothing here can claim to be complete.",
+    "Feed spend for a season has never been recorded, and neither has the number of birds it fed. Until one of them is, the quantity a bird eats stays a published standard rather than a measurement.",
     "Owner labor is unpriced. Build hours and chore hours are counted on the other measures and carried at nothing here."
   ]
 }

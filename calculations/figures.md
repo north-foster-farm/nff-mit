@@ -42,8 +42,7 @@ F10. The figure is gross, before sell-through.
 
 | # | Figure | Value |
 |---|---|---:|
-| F20 | [Cost a bird](/measures/costs)<sup class="dec d-projected" data-tip="Projected" tabindex="0">P</sup> | $18.12 |
-| F21 | [Cost a bird, fed to standard](/measures/costs)<sup class="dec d-projected" data-tip="Projected" tabindex="0">P</sup> | $19.89 |
+| F20 | [Cost a bird](/measures/costs)<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> | $19.89 |
 | F22 | [Feed, broiler mash](/measures/costs)<sup class="dec d-verified" data-tip="Verified" tabindex="0">+3</sup> | $0.4206 a lb |
 | F23 | [Chick, delivered](/measures/costs)<sup class="dec d-verified" data-tip="Verified" tabindex="0">+3</sup> | $2.20 |
 | F24 | [Processing a bird](/measures/costs)<sup class="dec d-verified" data-tip="Verified" tabindex="0">+3</sup> | $11.38 |
@@ -69,11 +68,10 @@ something the farm pays. Nothing it earns is evidenced by one.
 | Mark | Rung | Figures |
 |---|---|---:|
 | <sup class="dec d-verified" data-tip="Verified" tabindex="0">+3</sup> | Verified | 4 |
-| <sup class="dec d-projected" data-tip="Projected" tabindex="0">P</sup> | Projected | 2 |
 | <sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | Assumed, high confidence | 1 |
-| <sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> | Assumed, low confidence | 12 |
+| <sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> | Assumed, low confidence | 13 |
 | <sup class="dec d-unknown" data-tip="Unknown" tabindex="0">−3</sup> | Unknown | 1 |
-|  | **Total** | **20** |
+|  | **Total** | **19** |
 
 ## What carries the weight
 
@@ -83,7 +81,7 @@ of birds the farm has to raise, while an error elsewhere moves a detail.
 | # | Figure | Value | Decides | How it enters |
 |---|---|---:|---|---|
 | F10 | Gross revenue a bird<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> | $47.54 | What a bird earns | multiplied by the bird count |
-| F20 | Cost a bird<sup class="dec d-projected" data-tip="Projected" tabindex="0">P</sup> | $18.12 | What a bird costs | subtracted from what it earns |
+| F20 | Cost a bird<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> | $19.89 | What a bird costs | subtracted from what it earns |
 | F25 | Costs paid by the year<sup class="dec d-unknown" data-tip="Unknown" tabindex="0">−3</sup> | $2,190 | What the year costs before anyone is paid | added on top of what the birds have to cover |
 
 None of them rests on a document. Precision downstream cannot repair that.
