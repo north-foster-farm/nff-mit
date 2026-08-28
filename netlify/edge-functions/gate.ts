@@ -232,14 +232,31 @@ async function handleCallback(
   ])
 }
 
+// CANONICAL_HOST is a bare hostname. A scheme or a trailing path pasted
+// in with it used to break every request on the site: assigning
+// `https://host` to url.hostname stops at the colon, so the whole site
+// redirected to `https://https`. A value that is not a hostname is
+// ignored rather than obeyed, because a wrong canonical host takes the
+// site down and no canonical host merely makes sign in fail on the
+// subdomains nobody uses.
+function canonicalHost(): string {
+  const raw = env('CANONICAL_HOST').trim()
+  if (!raw) return ''
+  const bare = raw.replace(/^[a-z][a-z0-9+.-]*:\/\//i, '').split('/')[0]
+  return /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$/i
+    .test(bare)
+    ? bare.toLowerCase()
+    : ''
+}
+
 export default async function gate(req: Request): Promise<Response | void> {
   const url = new URL(req.url)
 
   // Only one hostname has a registered redirect URI, so sign in can only
   // ever complete there. Send the free Netlify subdomain and any deploy
   // preview to it rather than leaving them on a door that cannot open.
-  const canonical = env('CANONICAL_HOST')
-  if (canonical && url.hostname !== canonical) {
+  const canonical = canonicalHost()
+  if (canonical && url.hostname.toLowerCase() !== canonical) {
     url.hostname = canonical
     url.protocol = 'https:'
     url.port = ''
