@@ -1,0 +1,428 @@
+{
+  "meta": {
+    "title": "Goods",
+    "nav": {
+      "prev": {
+        "text": "Labor",
+        "link": "/measures/labor"
+      },
+      "next": {
+        "text": "Costs",
+        "link": "/measures/costs"
+      }
+    },
+    "basis": "Prices are the 2027 list, derived from Pat's per-pound curve at each band midpoint and rounded to whole dollars.",
+    "source": "Price list and 2027 projection, 23 August 2026",
+    "modeledAt": 7000,
+    "carcass": {
+      "weight": 4.25,
+      "cv": 12,
+      "confidence": "assumed-low",
+      "note": "Neither figure has been weighed, and the whole band distribution is derived from them."
+    },
+    "shift": "downward, and it holds until real weights replace it",
+    "priceNote": "The list is Pat's, adapted to a different carcass, and it is not yet a pricing strategy of NFF's own.",
+    "shiftSd": 1,
+    "shiftConfidence": "assumed-low"
+  },
+  "packSpec": [
+    {
+      "sku": "Boneless breasts",
+      "pieces": 2,
+      "birds": 1,
+      "avgPack": 1.12
+    },
+    {
+      "sku": "Bone-in breasts",
+      "pieces": 2,
+      "birds": 1,
+      "avgPack": 1.42
+    },
+    {
+      "sku": "Bone-in thighs",
+      "pieces": 4,
+      "birds": 2,
+      "avgPack": 1.35
+    },
+    {
+      "sku": "Boneless thighs",
+      "pieces": 4,
+      "birds": 2,
+      "avgPack": 0.94
+    },
+    {
+      "sku": "Drumsticks",
+      "pieces": 6,
+      "birds": 3,
+      "avgPack": 1.46
+    },
+    {
+      "sku": "Wings",
+      "pieces": 10,
+      "birds": 5,
+      "avgPack": 1.96
+    },
+    {
+      "sku": "Tenders",
+      "pieces": 12,
+      "birds": 6,
+      "avgPack": 0.9
+    }
+  ],
+  "diversions": [
+    {
+      "label": "Breasts left bone-in",
+      "share": 25,
+      "confidence": "assumed-low",
+      "note": "Leaving breasts bone-in keeps the keel and rib meat that otherwise leaves with the frame. The yield behind the share is an industry standard rather than a measured one."
+    },
+    {
+      "label": "Thighs to sausage",
+      "share": 80,
+      "confidence": "assumed-low"
+    },
+    {
+      "label": "Remaining thighs deboned",
+      "share": 10,
+      "confidence": "assumed-low",
+      "note": "The deboning applies to the thighs left after sausage takes its share."
+    },
+    {
+      "label": "Drumsticks to sausage",
+      "share": 95,
+      "confidence": "assumed-low"
+    },
+    {
+      "label": "Whole birds spatchcocked",
+      "share": 30,
+      "confidence": "assumed-low",
+      "note": "Spatchcocking is one cut with shears."
+    }
+  ],
+  "skus": [
+    {
+      "id": "G01",
+      "label": "Whole chicken",
+      "bands": [
+        {
+          "label": "2.00 to 2.40",
+          "price": 22,
+          "packs": 2
+        },
+        {
+          "label": "2.50 to 2.90",
+          "price": 27,
+          "packs": 30
+        },
+        {
+          "label": "3.00 to 3.40",
+          "price": 31,
+          "packs": 201
+        },
+        {
+          "label": "3.50 to 3.90",
+          "price": 36,
+          "packs": 432
+        },
+        {
+          "label": "4.00 to 4.40",
+          "price": 40,
+          "packs": 305
+        },
+        {
+          "label": "4.50 to 4.90",
+          "price": 45,
+          "packs": 69
+        },
+        {
+          "label": "5.00 to 5.90",
+          "price": 52,
+          "packs": 5
+        },
+        {
+          "label": "6.00 to 6.90",
+          "price": 61,
+          "packs": 0
+        },
+        {
+          "label": "7.00 to 7.90",
+          "price": 71,
+          "packs": 0
+        }
+      ]
+    },
+    {
+      "id": "G02",
+      "label": "Spatchcocked",
+      "bands": [
+        {
+          "label": "2.50 to 2.90",
+          "price": 33,
+          "packs": 14
+        },
+        {
+          "label": "3.00 to 3.40",
+          "price": 38,
+          "packs": 89
+        },
+        {
+          "label": "3.50 to 3.90",
+          "price": 42,
+          "packs": 191
+        },
+        {
+          "label": "4.00 to 4.40",
+          "price": 46,
+          "packs": 135
+        },
+        {
+          "label": "4.50 to 4.90",
+          "price": 51,
+          "packs": 30
+        },
+        {
+          "label": "5.00 to 5.40",
+          "price": 54,
+          "packs": 2
+        },
+        {
+          "label": "5.50 to 5.90",
+          "price": 58,
+          "packs": 0
+        }
+      ]
+    },
+    {
+      "id": "G03",
+      "label": "Boneless breasts",
+      "bands": [
+        {
+          "label": "0.75 to 0.99",
+          "price": 16,
+          "packs": 666
+        },
+        {
+          "label": "1.00 to 1.24",
+          "price": 23,
+          "packs": 2639
+        },
+        {
+          "label": "1.25 to 1.49",
+          "price": 27,
+          "packs": 772
+        },
+        {
+          "label": "1.50 to 1.74",
+          "price": 32,
+          "packs": 11
+        },
+        {
+          "label": "1.75 to 1.99",
+          "price": 36,
+          "packs": 0
+        },
+        {
+          "label": "2.00 to 2.24",
+          "price": 41,
+          "packs": 0
+        }
+      ]
+    },
+    {
+      "id": "G04",
+      "label": "Bone-in breasts",
+      "bands": [
+        {
+          "label": "0.75 to 0.99",
+          "price": 19,
+          "packs": 8
+        },
+        {
+          "label": "1.00 to 1.24",
+          "price": 24,
+          "packs": 187
+        },
+        {
+          "label": "1.25 to 1.49",
+          "price": 29,
+          "packs": 699
+        },
+        {
+          "label": "1.50 to 1.74",
+          "price": 33,
+          "packs": 432
+        },
+        {
+          "label": "1.75 to 1.99",
+          "price": 38,
+          "packs": 40
+        },
+        {
+          "label": "2.00 to 2.24",
+          "price": 42,
+          "packs": 1
+        }
+      ]
+    },
+    {
+      "id": "G05",
+      "label": "Bone-in thighs",
+      "bands": [
+        {
+          "label": "0.50 to 0.99",
+          "price": 10,
+          "packs": 0
+        },
+        {
+          "label": "1.00 to 1.49",
+          "price": 17,
+          "packs": 430
+        },
+        {
+          "label": "1.50 to 1.99",
+          "price": 23,
+          "packs": 50
+        },
+        {
+          "label": "2.00 to 2.49",
+          "price": 29,
+          "packs": 0
+        }
+      ]
+    },
+    {
+      "id": "G06",
+      "label": "Boneless thighs",
+      "bands": [
+        {
+          "label": "0.50 to 0.99",
+          "price": 15,
+          "packs": 40
+        },
+        {
+          "label": "1.00 to 1.49",
+          "price": 24,
+          "packs": 15
+        },
+        {
+          "label": "1.50 to 1.99",
+          "price": 33,
+          "packs": 0
+        },
+        {
+          "label": "2.00 to 2.49",
+          "price": 42,
+          "packs": 0
+        }
+      ]
+    },
+    {
+      "id": "G07",
+      "label": "Tenders",
+      "bands": [
+        {
+          "label": "0.50 to 0.99",
+          "price": 16,
+          "packs": 895
+        },
+        {
+          "label": "1.00 to 1.49",
+          "price": 25,
+          "packs": 17
+        },
+        {
+          "label": "1.50 to 1.99",
+          "price": 34,
+          "packs": 0
+        }
+      ]
+    },
+    {
+      "id": "G08",
+      "label": "Drumsticks",
+      "bands": [
+        {
+          "label": "0.50 to 0.99",
+          "price": 9,
+          "packs": 0
+        },
+        {
+          "label": "1.00 to 1.49",
+          "price": 16,
+          "packs": 56
+        },
+        {
+          "label": "1.50 to 1.99",
+          "price": 23,
+          "packs": 35
+        },
+        {
+          "label": "2.00 to 2.49",
+          "price": 30,
+          "packs": 0
+        }
+      ]
+    },
+    {
+      "id": "G09",
+      "label": "Wings",
+      "bands": [
+        {
+          "label": "1.00 to 1.49",
+          "price": 12,
+          "packs": 0
+        },
+        {
+          "label": "1.50 to 1.99",
+          "price": 16,
+          "packs": 645
+        },
+        {
+          "label": "2.00 to 2.49",
+          "price": 21,
+          "packs": 436
+        },
+        {
+          "label": "2.50 to 2.99",
+          "price": 25,
+          "packs": 0
+        },
+        {
+          "label": "3.00 to 3.49",
+          "price": 29,
+          "packs": 0
+        }
+      ]
+    },
+    {
+      "id": "G10",
+      "label": "Sausage",
+      "banded": false,
+      "note": "Sausage is priced above Pat's per-pound curve.",
+      "bands": [
+        {
+          "label": "0.75 lb pack",
+          "price": 18,
+          "packs": 5330
+        }
+      ]
+    },
+    {
+      "id": "G11",
+      "label": "Offal",
+      "banded": false,
+      "bands": [
+        {
+          "label": "1 lb pack",
+          "price": 6,
+          "packs": 48
+        }
+      ]
+    }
+  ],
+  "blank": [
+    "Sell-through is unmeasured. Every figure here is gross, and the model applies the rate.",
+    "Wing and tender packs are accumulated and sorted rather than packed bird by bird, and the [labor measure](/measures/labor) does not yet carry that work.",
+    "The boneless thigh share is small enough that the product's future is open."
+  ]
+}
