@@ -1,0 +1,164 @@
+{
+  "version": "507082e01851",
+  "groups": [
+    {
+      "id": "decisions",
+      "label": "Decisions",
+      "note": "Chosen rather than measured. Change these to ask a different question.",
+      "items": [
+        {
+          "id": "D01",
+          "label": "Owner draw",
+          "value": 70000,
+          "kind": "decision",
+          "unit": "money",
+          "min": 0,
+          "max": 210000,
+          "step": 1000,
+          "note": "The wage the owners take out of the business in a year. The figure is provisional. The chain shows what it costs, not whether it is right."
+        },
+        {
+          "id": "D02",
+          "label": "Owners",
+          "value": 2,
+          "kind": "decision",
+          "unit": "count",
+          "min": 1,
+          "max": 6,
+          "step": 1,
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "inputs",
+      "label": "Inputs",
+      "note": "Estimated and adjustable. These carry no confidence mark, because moving one says more than a mark would.",
+      "items": [
+        {
+          "id": "I01",
+          "label": "Sell-through",
+          "value": 0.85,
+          "kind": "input",
+          "unit": "share",
+          "min": 0.6,
+          "max": 1,
+          "step": 0.05,
+          "note": "The share of what is raised that is eventually sold. It has never been measured. Everything raised is paid for whether or not it sells."
+        }
+      ]
+    },
+    {
+      "id": "figures",
+      "label": "Figures",
+      "note": "Measured elsewhere. Changing one here asks what if the measurement were different, and it does not change the measure.",
+      "items": [
+        {
+          "id": "F10",
+          "label": "Gross revenue a bird",
+          "value": 47.53771428571429,
+          "kind": "figure",
+          "unit": "cents",
+          "min": 0,
+          "max": 95,
+          "step": 0.5,
+          "confidence": "assumed-low",
+          "from": "/measures/goods",
+          "note": "The figure is gross, before sell-through."
+        },
+        {
+          "id": "F20",
+          "label": "Cost a bird",
+          "value": 19.88948,
+          "kind": "figure",
+          "unit": "cents",
+          "min": 0,
+          "max": 40,
+          "step": 0.5,
+          "confidence": "assumed-low",
+          "from": "/measures/costs",
+          "note": null
+        },
+        {
+          "id": "F25",
+          "label": "Costs paid by the year",
+          "value": 2190,
+          "kind": "figure",
+          "unit": "money",
+          "min": 0,
+          "max": 4380,
+          "step": 100,
+          "confidence": "unknown",
+          "from": "/measures/costs",
+          "note": "The total is a floor, because 3 of the 6 yearly lines carry no figure."
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "id": "E01",
+      "label": "Draw a person",
+      "op": "div",
+      "a": "D01",
+      "b": "D02",
+      "show": "money"
+    },
+    {
+      "id": "E02",
+      "label": "Revenue a bird sold",
+      "op": "mul",
+      "a": "F10",
+      "b": "I01",
+      "show": "cents"
+    },
+    {
+      "id": "E03",
+      "label": "Contribution a bird",
+      "op": "sub",
+      "a": "E02",
+      "b": "F20",
+      "show": "cents",
+      "link": "/measures/costs"
+    },
+    {
+      "id": "E04",
+      "label": "Margin the year must clear",
+      "op": "add",
+      "a": "D01",
+      "b": "F25",
+      "show": "money"
+    },
+    {
+      "id": "E05",
+      "label": "Birds required",
+      "op": "div",
+      "a": "E04",
+      "b": "E03",
+      "show": "birds"
+    }
+  ],
+  "capacity": 300,
+  "fleet": {
+    "tractor": {
+      "label": "Salatin tractor",
+      "count": 5,
+      "birds": 60
+    },
+    "coop600": {
+      "label": "Model 600",
+      "count": 0,
+      "birds": 900
+    },
+    "layerCoop": {
+      "label": "Layer coop",
+      "count": 2,
+      "birds": null
+    },
+    "brooder": {
+      "label": "Brooder",
+      "count": 1,
+      "birds": 900
+    }
+  }
+}

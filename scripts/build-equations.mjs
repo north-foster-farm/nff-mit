@@ -18,6 +18,7 @@ import { dec } from './confidence.mjs'
 import { emitter, R, Ln, nav, commas } from './markdown.mjs'
 import { loadFigures } from './figures-model.mjs'
 import { lineChart } from './charts.mjs'
+import { runChain, formula } from './chain.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const eq = JSON.parse(
@@ -41,14 +42,14 @@ const D01 = eq.decisions.find((d) => d.id === 'D01')
 const D02 = eq.decisions.find((d) => d.id === 'D02')
 const I01 = eq.inputs.find((i) => i.id === 'I01')
 
-/* ---------- the chain ---------- */
-const run = (sellThrough) => {
-  const E01 = D01.value / D02.value
-  const E02 = F10.n * sellThrough
-  const E03 = E02 - F20.n
-  const E04 = D01.value + F25.n
-  return { E01, E02, E03, E04, E05: E03 > 0 ? E04 / E03 : Infinity }
-}
+/* ---------- the chain ----------
+   Evaluated by the same function the model page runs in the browser, so
+   the printed answer and the live one cannot drift apart. */
+const run = (sellThrough) =>
+  runChain(eq.steps, {
+    D01: D01.value, D02: D02.value, I01: sellThrough,
+    F10: F10.n, F20: F20.n, F25: F25.n,
+  })
 const now = run(I01.value)
 
 /** Below this rate a bird returns less than it cost, and no number of
@@ -56,9 +57,7 @@ const now = run(I01.value)
  *  it excludes. */
 const breakEven = Math.ceil((F20.n / F10.n) * 100) / 100
 
-const shown = { E01: money, E02: cents, E03: cents, E04: money, E05: birds }
-const pretty = (e) =>
-  e.replaceAll('/', '÷').replaceAll('*', '×').replaceAll('-', '−')
+const shown = { money, cents, birds }
 
 /* ---------- page ---------- */
 push(...nav(eq.meta.nav))
@@ -102,10 +101,8 @@ table(
   [Ln, Ln, Ln, R],
   eq.steps.map((s) => [
     s.id,
-    s.id === 'E03'
-      ? `[${s.label}](/measures/costs)`
-      : s.label,
-    pretty(s.expr), shown[s.id](now[s.id]),
+    s.link ? `[${s.label}](${s.link})` : s.label,
+    formula(s), shown[s.show](now[s.id]),
   ]),
 )
 P(`The bird count is a floor. ${eq.unset.map((u) => u.label.toLowerCase())

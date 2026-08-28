@@ -59,27 +59,43 @@
     {
       "id": "E01",
       "label": "Draw a person",
-      "expr": "D01 / D02"
+      "op": "div",
+      "a": "D01",
+      "b": "D02",
+      "show": "money"
     },
     {
       "id": "E02",
       "label": "Revenue a bird sold",
-      "expr": "F10 * I01"
+      "op": "mul",
+      "a": "F10",
+      "b": "I01",
+      "show": "cents"
     },
     {
       "id": "E03",
       "label": "Contribution a bird",
-      "expr": "E02 - F20"
+      "op": "sub",
+      "a": "E02",
+      "b": "F20",
+      "show": "cents",
+      "link": "/measures/costs"
     },
     {
       "id": "E04",
       "label": "Margin the year must clear",
-      "expr": "D01 + F25"
+      "op": "add",
+      "a": "D01",
+      "b": "F25",
+      "show": "money"
     },
     {
       "id": "E05",
       "label": "Birds required",
-      "expr": "E04 / E03"
+      "op": "div",
+      "a": "E04",
+      "b": "E03",
+      "show": "birds"
     }
   ],
   "blank": [

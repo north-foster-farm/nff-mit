@@ -1,0 +1,257 @@
+/* The live model.
+   Two things are on screen: a document, and a pane that appears only when
+   somebody asks to change something. The document is the default state,
+   because the model is meant to be read as often as it is driven. */
+
+/* A value inside a sentence. It sits in the text, not on top of it, and
+   only announces itself once it has been changed. */
+.vp-doc .mv {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.vp-doc .mv.is-changed {
+  color: var(--vp-c-brand-1);
+}
+.vp-doc .d-changed { color: var(--vp-c-brand-1); }
+
+/* The chain. Its own table rather than a markdown one, because it
+   re-renders on every keystroke. */
+.vp-doc .model-chain { margin: 22px 0; overflow-x: auto; }
+.vp-doc .model-chain table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+.vp-doc .model-chain th,
+.vp-doc .model-chain td {
+  padding: 10px 16px;
+  border: 1px solid var(--vp-c-divider);
+  text-align: left;
+}
+.vp-doc .model-chain th {
+  font-size: 15px;
+  font-weight: 600;
+  background: var(--vp-c-bg-soft);
+}
+.vp-doc .model-chain .r { text-align: right; }
+.vp-doc .model-chain .mono {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+.vp-doc .model-chain .dim { color: var(--vp-c-text-3); }
+.vp-doc .model-chain .is-answer td {
+  background: var(--vp-c-brand-soft);
+  font-weight: 600;
+}
+
+/* The control that opens the pane. */
+.vp-doc .modify { margin: 14px 0 26px; }
+.modify-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 15px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 999px;
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+  font: 600 14px/1 Montserrat, sans-serif;
+  cursor: pointer;
+  transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+.modify-btn:hover,
+.modify-btn.is-open {
+  border-color: var(--vp-c-brand-3);
+  color: var(--vp-c-text-1);
+  background: var(--vp-c-brand-soft);
+}
+.modify-btn .badge {
+  min-width: 19px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--vp-c-brand-2);
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* The prose gives up the width the pane takes, rather than being covered
+   by it. Two columns, which is the point: the sentence you are changing
+   has to stay readable while you change it. */
+/* Give the pane its column by narrowing the page itself.
+   Shifting .VPContent does not work: the theme sizes it to the viewport,
+   so a margin there overflows rather than shrinks, and its padding is set
+   from a scoped rule whose attribute selector outranks anything here and
+   is also what centers the column. Padding the body moves everything
+   inside it and leaves the theme's own math alone. */
+body { transition: padding-right .22s ease; }
+html.pane-open body { padding-right: min(410px, 92vw); }
+html.pane-open .VPDocAside { display: none; }
+
+@media (max-width: 960px) {
+  html.pane-open body { padding-right: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body { transition: none; }
+}
+
+/* The pane. Fixed to the right so the prose keeps its measure, and the
+   sentence you are changing stays where it was on the page. */
+.model-pane {
+  position: fixed;
+  top: var(--vp-nav-height);
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  width: min(410px, 92vw);
+  overflow-y: auto;
+  padding: 22px 24px 30px;
+  background: var(--vp-c-bg-elv);
+  border-left: 1px solid var(--vp-c-divider);
+  box-shadow: -14px 0 34px rgba(0, 0, 0, .28);
+}
+.model-pane header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.model-pane h2 {
+  margin: 0 0 5px;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+}
+.model-pane header p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--vp-c-text-3);
+}
+.model-pane .x {
+  margin-left: auto;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--vp-c-text-2);
+  font-size: 21px;
+  line-height: 1;
+  cursor: pointer;
+}
+.model-pane .x:hover { background: var(--vp-c-bg-soft); }
+
+.model-pane .stale {
+  margin: 0 0 18px;
+  padding: 10px 13px;
+  border-left: 3px solid #f0c674;
+  border-radius: 0 6px 6px 0;
+  background: rgba(240, 198, 116, .1);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.model-pane .row {
+  padding: 15px 0;
+  border-top: 1px solid var(--vp-c-divider);
+}
+.model-pane label {
+  display: block;
+  margin-bottom: 9px;
+  font-size: 14.5px;
+  font-weight: 600;
+}
+.model-pane .id {
+  margin-right: 7px;
+  color: var(--vp-c-text-3);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+}
+.model-pane .controls {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+.model-pane input[type="range"] {
+  flex: 1;
+  accent-color: var(--vp-c-brand-2);
+  cursor: pointer;
+}
+.model-pane output {
+  min-width: 78px;
+  text-align: right;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.model-pane .undo {
+  width: 27px;
+  height: 27px;
+  flex: none;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--vp-c-text-2);
+  cursor: pointer;
+  transition: opacity .15s ease;
+}
+.model-pane .undo:disabled { opacity: .28; cursor: default; }
+.model-pane .undo:not(:disabled):hover {
+  border-color: var(--vp-c-brand-3);
+  color: var(--vp-c-text-1);
+}
+.model-pane .note {
+  margin: 9px 0 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--vp-c-text-3);
+}
+
+.model-pane footer {
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid var(--vp-c-divider);
+}
+.model-pane .count {
+  margin: 0 0 11px;
+  font-size: 13px;
+  color: var(--vp-c-text-3);
+}
+.model-pane .acts { display: flex; gap: 8px; flex-wrap: wrap; }
+.model-pane .acts button {
+  padding: 6px 13px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--vp-c-text-2);
+  font: 600 13.5px/1 Montserrat, sans-serif;
+  cursor: pointer;
+}
+.model-pane .acts button:disabled { opacity: .35; cursor: default; }
+.model-pane .acts button:not(:disabled):hover {
+  border-color: var(--vp-c-brand-3);
+  color: var(--vp-c-text-1);
+}
+
+/* The pane slides rather than appearing, so it reads as the same page
+   opening rather than a new one arriving. */
+.pane-enter-active,
+.pane-leave-active { transition: transform .22s ease, opacity .22s ease; }
+.pane-enter-from,
+.pane-leave-to { transform: translateX(22px); opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pane-enter-active, .pane-leave-active { transition: none }
+  .modify-btn { transition: none }
+}
+
+/* On a narrow screen the pane takes the width it needs and the aside
+   would only crowd it. */
+@media (max-width: 960px) {
+  .model-pane { width: 100vw; border-left: 0; }
+}

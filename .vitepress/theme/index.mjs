@@ -1,6 +1,12 @@
 import DefaultTheme from 'vitepress/theme'
 import { h, onMounted } from 'vue'
 import './brand.css'
+import './model.css'
+import { loadModel } from './model-store.mjs'
+import ModelValue from './components/ModelValue.vue'
+import ModelChain from './components/ModelChain.vue'
+import ModelPane from './components/ModelPane.vue'
+import ModifyValues from './components/ModifyValues.vue'
 
 // The header carries no custom markup.
 //
@@ -83,12 +89,22 @@ function mountMarkTooltips() {
 const Layout = {
   name: 'MitLayout',
   setup() {
-    onMounted(mountMarkTooltips)
-    return () => h(DefaultTheme.Layout)
+    onMounted(() => {
+      mountMarkTooltips()
+      loadModel()
+    })
+    return () => h(DefaultTheme.Layout, null, {
+      'layout-bottom': () => h(ModelPane),
+    })
   },
 }
 
 export default {
   extends: DefaultTheme,
   Layout,
+  enhanceApp({ app }) {
+    app.component('Fig', ModelValue)
+    app.component('Chain', ModelChain)
+    app.component('Modify', ModifyValues)
+  },
 }
