@@ -14,6 +14,7 @@ import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { dec } from './confidence.mjs'
 import { emitter, R, Ln, nav, commas } from './markdown.mjs'
+import { barChart } from './charts.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const g = JSON.parse(await readFile(join(root, 'data', 'goods.json'), 'utf8'))
@@ -125,6 +126,26 @@ do not line up, so a share is always a share of its own product.`)
 for (const s of banded) {
   const shares = sharesFor(s)
   push(`### ${s.label}`, '')
+  push(
+    barChart(
+      s.bands.map((b, i) => ({
+        label: b.label.split(' ')[0],
+        value: shares[i],
+        muted: !b.packs,
+        title: b.packs
+          ? `${b.label} lb at ${money(b.price)}. ` +
+            `${commas(b.packs)} packs, ${pct(shares[i])} of ${s.label.toLowerCase()}, ` +
+            `${money(b.packs * b.price)}.`
+          : `${b.label} lb at ${money(b.price)}. No production.`,
+      })),
+      {
+        format: (n) => `${n}%`,
+        yLabel: `Share of ${s.label.toLowerCase()} by weight band`,
+        caption: `Share of packs by pack weight, in pounds`,
+      },
+    ),
+    '',
+  )
   table(
     ['Band', 'Price', 'Packs', 'Share', 'Revenue'],
     [Ln, R, R, R, R],

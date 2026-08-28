@@ -141,6 +141,44 @@
 .vp-doc .d-load{color:var(--vp-c-text-3)}
 .vp-doc .d-kpi{color:var(--vp-c-brand-1)}
 
+/* Charts. Rendered to SVG at build time, so everything here is styling a
+   document rather than configuring a library. Colors come from the theme
+   variables, which is what makes light and dark free. */
+.vp-doc .chart{margin:24px 0 28px}
+.vp-doc .chart svg{width:100%;height:auto;display:block;overflow:visible}
+.vp-doc .chart figcaption{
+  margin-top:2px;font-size:12.5px;color:var(--vp-c-text-3);text-align:center}
+
+.chart-grid{stroke:var(--vp-c-divider);stroke-width:1;shape-rendering:crispEdges}
+.chart-axis{stroke:var(--vp-c-divider-strong,var(--vp-c-divider));stroke-width:1.5;
+  shape-rendering:crispEdges}
+.chart-zero{stroke:var(--vp-c-text-3);stroke-width:2;opacity:.35}
+
+.chart-bar{fill:var(--vp-c-brand-2);transition:fill .14s ease}
+.chart-col.is-muted .chart-label{opacity:.45}
+.chart-col.is-muted .chart-zero{opacity:.3}
+
+/* Type inside a chart is small on purpose. The bar carries the reading
+   and the number confirms it, so the number must not shout. */
+.chart-tick,.chart-label{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:11px;fill:var(--vp-c-text-3)}
+.chart-value{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:11.5px;font-weight:600;fill:var(--vp-c-text-2);
+  transition:fill .14s ease}
+
+/* The hover target is the whole column, not the bar, so a short bar is
+   as easy to reach as a tall one. The rect stays invisible. */
+.chart-hit{fill:transparent}
+.chart-col:hover .chart-bar{fill:var(--vp-c-brand-1)}
+.chart-col:hover .chart-value{fill:var(--vp-c-text-1)}
+.chart-col:hover .chart-label{fill:var(--vp-c-text-2)}
+
+@media (prefers-reduced-motion:reduce){
+  .chart-bar,.chart-value{transition:none}
+}
+
 /* The tooltip the theme renders for a mark. One node, moved and filled
    on hover, so the page carries no per-mark markup. */
 .dec-tip{
