@@ -173,8 +173,12 @@ async function handleCallback(
   let back = '/'
   try {
     const parsed = JSON.parse(raw)
-    // Only ever resume a path on this origin.
-    if (typeof parsed.r === 'string' && parsed.r.startsWith('/')) {
+    // Only ever resume a path on this origin. One leading slash is not
+    // enough: `//evil.com` and `/\evil.com` are protocol-relative URLs,
+    // and a browser follows them off the origin entirely. Our own
+    // signature is no help, because the path we sign came from the
+    // request line, so a crafted link gets its redirect signed for it.
+    if (typeof parsed.r === 'string' && /^\/(?![/\\])/.test(parsed.r)) {
       back = parsed.r
     }
   } catch {
