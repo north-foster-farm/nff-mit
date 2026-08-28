@@ -1,5 +1,5 @@
 ---
-prev: { text: 'Calculations', link: '/calculations/' }
+prev: { text: 'Figures', link: '/calculations/figures' }
 next: false
 ---
 
@@ -113,7 +113,7 @@ the FSA direct Farm Operating rate is 5.25% as of August
 The term is 7 years throughout. The owner share is adjustable, so each pair
 of rows is the ends of a range rather than two choices.
 
-FSA announces its rates monthly, so the rate above carries the month it was
+FSA announces its rates monthly, so this figure carries the month it was
 read. The alternatives are not interchangeable products.
 
 | Alternative | Rate |

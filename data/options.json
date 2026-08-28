@@ -3,8 +3,8 @@
     "title": "Capacity options",
     "nav": {
       "prev": {
-        "text": "Calculations",
-        "link": "/calculations/"
+        "text": "Figures",
+        "link": "/calculations/figures"
       },
       "next": false
     },

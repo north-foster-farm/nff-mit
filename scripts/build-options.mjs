@@ -186,8 +186,7 @@ table(
 )
 P(`The term is ${F.term} years throughout. The owner share is adjustable,
 so each pair of rows is the ends of a range rather than two choices.`)
-P(`FSA announces its rates monthly, so the rate above carries the month it
-was read. The alternatives are not interchangeable products.`)
+P(`${F.note} The alternatives are not interchangeable products.`)
 
 table(
   ['Alternative', 'Rate'],

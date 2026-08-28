@@ -71,6 +71,40 @@ export function laborModel(d) {
       .filter(([, v]) => v.pasture)
       .reduce((n, [k, v]) => n + (v.birds ?? 0) * (f[k] ?? 0), 0)
 
+  /* ---- move day, and the week it sits in ----
+     Both the article and the figures register quote these. Computing
+     them here is what stops the two disagreeing, which they did: the
+     register was reporting a week that left the move out. */
+  const moveDay = d.periodic.find((p) => p.id === 'P01')
+  const steps = (moveDay?.phases ?? []).flatMap((ph) => ph.steps)
+
+  const stepCount = (s, f = fleet) =>
+    s.scalesWith === 'fixed' ? 1 : (f[s.scalesWith] ?? 0)
+  const stepBilled = (s, f = fleet) => {
+    const n = stepCount(s, f)
+    return s.absorbedBy ? Math.min(s.absorbedExcept ?? 0, n) : n
+  }
+  const billed = (s, f = fleet) => s.minutes * stepBilled(s, f)
+  const swallowed = (s, f = fleet) =>
+    s.minutes * (stepCount(s, f) - stepBilled(s, f))
+
+  const moveWork = (f = fleet) =>
+    steps.reduce((n, s) => n + billed(s, f), 0)
+
+  /** Ordinary chores still happen on move day, less whatever it absorbs. */
+  const choresOnMoveDay = (f = fleet) =>
+    dayTotal(f) -
+    d.tasks
+      .filter((t) => t.absorbedBy === moveDay?.id)
+      .reduce((n, t) => n + total(t, f), 0)
+
+  const moveDayTotal = (f = fleet) => choresOnMoveDay(f) + moveWork(f)
+
+  /** Seven days of blocks, with absorption applied, plus the move. */
+  const weekTotal = (f = fleet) =>
+    d.tasks.reduce((n, t) => n + total(t, f) * (t.daysPerWeek ?? 7), 0) +
+    moveWork(f)
+
   const byEnterprise = (f = fleet) => {
     const out = {}
     for (const t of d.tasks) {
@@ -83,5 +117,7 @@ export function laborModel(d) {
   return {
     d, units, fleet, live, countFor, perUnit, total, elapsed, overlapOf,
     tasksIn, blockTotal, dayTotal, liveBlocks, capacity, byEnterprise,
+    moveDay, steps, stepCount, stepBilled, billed, swallowed,
+    moveWork, choresOnMoveDay, moveDayTotal, weekTotal,
   }
 }

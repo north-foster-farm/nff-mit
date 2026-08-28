@@ -4,7 +4,7 @@
   "description": "North Foster Farm \u2014 Model Integration Tool",
   "type": "module",
   "scripts": {
-    "registers": "node scripts/build-labor.mjs && node scripts/build-goods.mjs && node scripts/build-costs.mjs && node scripts/build-options.mjs",
+    "registers": "node scripts/build-labor.mjs && node scripts/build-goods.mjs && node scripts/build-costs.mjs && node scripts/build-figures.mjs && node scripts/build-options.mjs",
     "dev": "vitepress dev .",
     "docs": "vitepress build .",
     "shell": "node scripts/build-shell.mjs",

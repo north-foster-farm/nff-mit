@@ -1,6 +1,6 @@
 ---
 prev: { text: 'Costs', link: '/measures/costs' }
-next: { text: 'Capacity options', link: '/calculations/options' }
+next: { text: 'Figures', link: '/calculations/figures' }
 ---
 
 # Calculations
