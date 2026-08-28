@@ -1,3 +1,8 @@
+---
+prev: { text: 'Labor', link: '/measures/labor' }
+next: { text: 'Costs', link: '/measures/costs' }
+---
+
 # Goods
 
 Not yet built. A row will be one product at one weight band, carrying its

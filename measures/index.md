@@ -41,8 +41,9 @@ happen and a person who has to be standing there.
 That single object is read three ways.
 
 - The *time study* measures the blocks.
-- A *capacity option* transforms them. Automatic feed and water remove the
-  reason to arrive at noon.
+- A *capacity option* transforms them. Automatic feed and water take the
+  broilers out of every block, though a block only disappears once
+  nothing else is left in it.
 - The *schedule builder* assigns them to a person and a day.
 
 Recorded as a flat annual figure, labor can answer none of that. Capital
