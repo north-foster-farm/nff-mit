@@ -1,0 +1,151 @@
+{
+  "meta": {
+    "title": "Costs",
+    "nav": {
+      "prev": {
+        "text": "Goods",
+        "link": "/measures/goods"
+      },
+      "next": {
+        "text": "Calculations",
+        "link": "/calculations/"
+      }
+    },
+    "classes": {
+      "bird": {
+        "label": "Per bird",
+        "note": "The flock. These belong in the cost of the goods sold."
+      },
+      "marketDay": {
+        "label": "Per market day",
+        "note": "How often the stall goes out."
+      },
+      "revenue": {
+        "label": "Per dollar sold",
+        "note": "Sales, whatever produced them."
+      },
+      "year": {
+        "label": "Per year",
+        "note": "Nothing. These are paid whether or not a bird is raised."
+      }
+    },
+    "invoiceRuling": "The feed invoices are deliberately not read into this repository. The ruling was made on August 26, 2026, and it accepts a known gap instead of carrying a document that would need scrubbing. What is missing is the monthly total. The rate above is invoiced."
+  },
+  "feed": {
+    "palletLb": 2500,
+    "shipping": 119,
+    "pallet": {
+      "broiler": 932.58,
+      "layer": 869.45
+    },
+    "priceConfidence": "verified",
+    "priceNote": "The price is invoiced.",
+    "perBirdActual": 10.8,
+    "perBirdRequirement": 15,
+    "perBirdConfidence": "projected",
+    "perBirdNote": "Two readings of feed per bird disagree. The first is a season's spend divided by the birds it fed. The second is the published standard for the breed."
+  },
+  "lines": [
+    {
+      "id": "K01",
+      "label": "Chick, delivered",
+      "amount": 2.2,
+      "scalesWith": "bird",
+      "confidence": "verified"
+    },
+    {
+      "id": "K02",
+      "label": "Feed",
+      "scalesWith": "bird",
+      "derived": "feed",
+      "confidence": "projected"
+    },
+    {
+      "id": "K03",
+      "label": "Processing, standard",
+      "amount": 11.38,
+      "scalesWith": "bird",
+      "confidence": "verified"
+    },
+    {
+      "id": "K04",
+      "label": "Sausage processing",
+      "amount": 16.19,
+      "scalesWith": "bird",
+      "confidence": "verified",
+      "excludeFromPerBird": true,
+      "note": "Sausage processing is charged on the birds diverted to sausage rather than on all of them, so it is held out of the per-bird total above."
+    },
+    {
+      "id": "K10",
+      "label": "Market vendor fees",
+      "scalesWith": "marketDay",
+      "confidence": "unknown",
+      "note": "Market vendor fees are real and unquantified. They vary from market to market, and no reading exists to size them."
+    },
+    {
+      "id": "K11",
+      "label": "Payment processing",
+      "scalesWith": "revenue",
+      "confidence": "unknown",
+      "note": "Payment processing takes a percentage of each sale plus a fee on every transaction. It is filed here instead of with the digital line, because grouping it there would understate the cost at volume and overstate it below."
+    },
+    {
+      "id": "K20",
+      "label": "Farm liability insurance",
+      "amount": 330,
+      "scalesWith": "year",
+      "confidence": "verified",
+      "note": "The insurance receipt is confirmed and the coverage is not. The policy predates the broiler enterprise and does not cover it, so a verified figure sits against inadequate cover."
+    },
+    {
+      "id": "K21",
+      "label": "Fuel, vehicle and equipment",
+      "amount": 1660,
+      "scalesWith": "year",
+      "confidence": "assumed-high",
+      "note": "The vehicle line covers markets, pop-ups and the round trips to processing. Equipment is diesel and gasoline through the season."
+    },
+    {
+      "id": "K22",
+      "label": "Bedding",
+      "amount": 200,
+      "scalesWith": "year",
+      "confidence": "assumed-low",
+      "note": "Bedding covers the brooder across a season. The winter storage house runs a deep layer whose volume nobody has measured."
+    },
+    {
+      "id": "K23",
+      "label": "Digital and administrative",
+      "scalesWith": "year",
+      "confidence": "unknown",
+      "note": "The digital line covers the workspace subscription, hosting, the domain and print. None of it has ever been totalled."
+    },
+    {
+      "id": "K24",
+      "label": "Electricity",
+      "scalesWith": "year",
+      "confidence": "unknown"
+    },
+    {
+      "id": "K25",
+      "label": "Grit and oyster shell",
+      "scalesWith": "year",
+      "confidence": "unknown"
+    },
+    {
+      "id": "K30",
+      "label": "Part-time helper",
+      "amount": 11440,
+      "scalesWith": "year",
+      "hoursPerWeek": 11,
+      "confidence": "assumed-high",
+      "optional": true,
+      "note": "The helper is held out of the total because a wage is a choice rather than a bill."
+    }
+  ],
+  "blank": [
+    "The list has never been built from bank and card statements. Until it is, nothing here can claim to be complete.",
+    "Owner labor is unpriced. Build hours and chore hours are counted on the other measures and carried at nothing here."
+  ]
+}
