@@ -1,229 +1,393 @@
-// Renders data/labor.json into the labor register.
+// Renders data/labor.json into the labor article.
 //
-// The JSON is the single source of truth. This page, the model's labor
+// The JSON is the single source of truth. This article, the model's labor
 // lines and the schedule builder are three presentations of it, and none
 // of them keeps its own copy.
+//
+// No figure is typed into the prose. Every one is read from the data or
+// derived from it, so a sentence cannot contradict the table beneath it.
+// Any count that appears in a sentence must come through a template hole.
+//
+// Table convention, applied everywhere: a header row naming every column,
+// and a total row whose first cell says what is being totalled.
 
 import { readFile, writeFile, mkdir } from 'node:fs/promises'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { dec, LABEL } from './confidence.mjs'
+import { dec } from './confidence.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const d = JSON.parse(await readFile(join(root, 'data', 'labor.json'), 'utf8'))
 const U = d.meta.units
+const E = d.meta.enterprises
+const W = d.meta.week
 
-/** Minutes as h/min, the way the farm says them. */
+/** Minutes as h/min, the way the farm says them. Half minutes survive,
+ *  because a per-unit figure of 22.5 rounded to 23 stops reconciling
+ *  against the total it was measured from. */
+const mins = (m) => (Number.isInteger(m) ? `${m}` : m.toFixed(1))
+const pad = (m) => (m < 10 ? `0${mins(m)}` : mins(m))
 const hm = (m) => {
   const h = Math.floor(m / 60)
-  const r = Math.round(m % 60)
-  if (!h) return `${r} min`
-  return r ? `${h} h ${String(r).padStart(2, '0')}` : `${h} h`
+  const r = m % 60
+  if (!h) return `${mins(r)} min`
+  return r ? `${h} h ${pad(r)}` : `${h} h`
 }
+
+const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
+  'eight', 'nine', 'ten']
+const say = (n) => WORDS[n] ?? String(n)
+const Say = (n) => say(n)[0].toUpperCase() + say(n).slice(1)
+
+const L = []
+
+/** A paragraph, wrapped. Prose is authored as one string so the sentence
+ *  reads whole in the source, and the wrapping stays mechanical. */
+const flow = (s, first, hang) => {
+  const words = s.replace(/\s+/g, ' ').trim().split(' ')
+  let line = first
+  let empty = true
+  for (const w of words) {
+    if (!empty && `${line} ${w}`.length > 76) {
+      L.push(line)
+      line = `${hang}${w}`
+    } else {
+      line = empty ? `${line}${w}` : `${line} ${w}`
+      empty = false
+    }
+  }
+  if (!empty) L.push(line)
+}
+const P = (s) => {
+  flow(s, '', '')
+  L.push('')
+}
+const LI = (s) => flow(s, '- ', '  ')
+
+/** A table. Every column is named, and a total row carries its label. */
+const table = (head, align, rows, totalRow) => {
+  L.push(`| ${head.join(' | ')} |`, `|${align.join('|')}|`)
+  for (const r of rows) L.push(`| ${r.join(' | ')} |`)
+  if (totalRow) L.push(`| ${totalRow.join(' | ')} |`)
+  L.push('')
+}
+const R = '---:'
+const Ln = '---'
 
 const fleet = Object.fromEntries(
   Object.entries(U).map(([k, v]) => [k, v.default]),
 )
 
-/** Unit count for a task, from the fleet. A fixed task is one of one. */
-const countFor = (task, f = fleet) =>
-  task.scalesWith === 'fixed' ? 1 : (f[task.scalesWith] ?? 0)
+const countFor = (t, f = fleet) =>
+  t.scalesWith === 'fixed' ? 1 : (f[t.scalesWith] ?? 0)
 
-const total = (task, f = fleet) => task.minutes * countFor(task, f)
+/** Minutes that add to the day. Overlap is time that runs alongside other
+ *  work, so it is real and it is not additive. */
+const perUnitBilled = (t) => t.minutes - (t.overlap ?? 0)
+const total = (t, f = fleet) => perUnitBilled(t) * countFor(t, f)
+const elapsed = (t, f = fleet) => t.minutes * countFor(t, f)
+const overlapOf = (t, f = fleet) => (t.overlap ?? 0) * countFor(t, f)
+
 const tasksIn = (b) => d.tasks.filter((t) => t.block === b.id)
 const blockTotal = (b, f = fleet) =>
-  tasksIn(b)
-    .filter((t) => !t.handsOff)
-    .reduce((n, t) => n + total(t, f), 0)
-
-const L = []
-L.push('# ' + d.meta.title, '', `**${d.meta.subtitle}.**`, '')
+  tasksIn(b).reduce((n, t) => n + total(t, f), 0)
 
 const daily = d.blocks.reduce((n, b) => n + blockTotal(b), 0)
-const offHands = d.tasks
-  .filter((t) => t.handsOff)
-  .reduce((n, t) => n + total(t), 0)
+const purges = d.tasks.filter((t) => t.purge)
+const lockedBlocks = d.blocks.filter((b) => b.slide === 'none')
 
-L.push(
-  `> **${d.blocks.length} time-locked blocks a day, ${hm(daily)} of them**, ` +
-    'before market prep, egg washing, processing or maintenance. The floor ' +
-    'is not made of minutes; it is made of visits, and a block that shrinks ' +
-    'to five minutes still owns the hour it sits in.',
-  '',
-)
-L.push(d.meta.basis, '')
+/* ---------- move day ---------- */
+const stepCount = (s, f = fleet) =>
+  s.scalesWith === 'fixed' ? 1 : (f[s.scalesWith] ?? 0)
 
-/* ---------- the fleet the page is costed against ---------- */
-L.push('## The fleet this is costed against', '')
-L.push('| Unit | Count | Birds each |', '|---|---:|---:|')
-for (const [k, v] of Object.entries(U)) {
-  L.push(`| ${v.label} | ${v.default} | ${v.birds ?? '—'} |`)
+/** Instances that add to the day. An absorbed step happens inside another
+ *  one, so it is real work that must not be counted a second time. */
+const stepBilled = (s, f = fleet) => {
+  const n = stepCount(s, f)
+  return s.absorbedBy ? Math.min(s.absorbedExcept ?? 0, n) : n
 }
-L.push(
-  '',
-  'Every duration below is recorded **per unit**, with the count held here',
-  'and nowhere else. Change the count and nothing needs re-measuring, which',
-  'is the only version of this table that answers the scale question.',
-  '',
-)
+const billed = (s, f = fleet) => s.minutes * stepBilled(s, f)
+const swallowed = (s, f = fleet) =>
+  s.minutes * (stepCount(s, f) - stepBilled(s, f))
+const sum = (xs, fn) => xs.reduce((n, x) => n + fn(x), 0)
 
-/* ---------- the daily blocks ---------- */
-L.push('## The daily blocks', '')
-L.push('| Block | Anchor | Duration | Slide |', '|---|---|---:|---|')
-for (const b of d.blocks) {
-  L.push(
-    `| **${b.name}** | ${b.anchor} | ${hm(blockTotal(b))} | ` +
-      `${b.slide === 'none' ? 'Locked' : 'Narrow'} |`,
-  )
-}
-L.push(`| | | **${hm(daily)}** | |`, '')
-if (offHands) {
-  L.push(
-    `Plus ${hm(offHands)} of hands-off time, which runs concurrently with`,
-    'other work and is therefore not added to the day.',
-    '',
-  )
-}
-
-/* ---------- the week ---------- */
-const perWeek = d.tasks
-  .filter((t) => !t.handsOff)
-  .reduce((n, t) => n + total(t) * (t.daysPerWeek ?? 7), 0)
-const absorbed = d.tasks.filter((t) => t.absorbedBy)
 const moveDay = d.periodic.find((p) => p.id === 'P01')
+const steps = (moveDay.phases ?? []).flatMap((ph) => ph.steps)
 
-L.push('## The same blocks, across a week', '')
-L.push(
-  `Seven days of blocks is **${hm(perWeek)}**, plus ${hm(moveDay.minutes)} for`,
-  'the layer move. The two do not simply add:',
-  '',
+const choresOnMoveDay =
+  daily -
+  d.tasks
+    .filter((t) => t.absorbedBy === moveDay.id)
+    .reduce((n, t) => n + total(t), 0)
+
+const moveWork = sum(steps, (s) => billed(s))
+const moveDayTotal = choresOnMoveDay + moveWork
+
+const plusOne = { ...fleet, layerCoop: fleet.layerCoop + 1 }
+const marginal = Math.round(
+  sum(steps, (s) => billed(s, plusOne)) - sum(steps, (s) => billed(s)),
 )
-for (const t of absorbed) {
-  const p = d.periodic.find((x) => x.id === t.absorbedBy)
-  L.push(
-    `- **${t.label}** runs ${t.daysPerWeek} mornings, not seven. On the`,
-    `  ${p.label.toLowerCase()} it happens inside the move rather than on top`,
-    `  of it, which is ${hm(total(t))} that must not be counted twice.`,
+
+const perWeek = d.tasks.reduce(
+  (n, t) => n + total(t) * (t.daysPerWeek ?? 7), 0,
+)
+const weekTotal = perWeek + moveWork
+const absorbedTasks = d.tasks.filter((t) => t.absorbedBy)
+const absorbedSteps = steps.filter((s) => swallowed(s))
+
+/* Weekdays left once the move takes one. The needs against them are
+   named in the prose, so the count has to come from the data. */
+const moveWeekdays = d.locks.filter((k) => k.day === 'One weekday').length
+const freeWeekdays = W.weekdays - moveWeekdays
+
+/* ---------- front matter and lead ---------- */
+const nav = d.meta.nav
+L.push('---')
+L.push(`prev: { text: '${nav.prev.text}', link: '${nav.prev.link}' }`)
+L.push(`next: { text: '${nav.next.text}', link: '${nav.next.link}' }`)
+L.push('---', '')
+L.push('# Labor', '')
+
+P(`**Labor** is the time the farm costs to run. It is recorded as chore
+blocks rather than as a total number of hours, because the limit that
+binds is how many separate times a day somebody has to be standing in a
+particular place.`)
+
+P(`A chore block is one of those times. Each block has an hour at which it
+must happen, a length that grows with the number of coops or tractors, and
+a person who has to be there. Shortening a block saves time inside the
+block. The block still has to be covered, and the shape of the day is
+unchanged.`)
+
+/* ---------- daily blocks ---------- */
+L.push('## Daily blocks', '')
+P(`A market departure and sundown fix ${say(lockedBlocks.length)} of the
+blocks, so an ordinary day cannot be rearranged freely.`)
+table(
+  ['Block', 'Anchor', 'Length', 'Can it slide'],
+  [Ln, Ln, R, Ln],
+  d.blocks.map((b) => [
+    b.name, b.anchor, hm(blockTotal(b)),
+    b.slide === 'none' ? 'No' : 'A little',
+  ]),
+  ['**Day**', '', `**${hm(daily)}**`, ''],
+)
+
+/* ---------- the purge ---------- */
+L.push('## Line purge', '')
+P(`The line purge is the wait for standing water to clear before the birds
+can drink. Water in a long hose run holds heat, the wait comes at every
+pasture visit, and it does not go away without a buried line.`)
+P(`What changes across the day is how much of that wait can be spent on
+something else.`)
+table(
+  ['Block', 'Wait', 'Overlapped', 'Counted', 'What overlaps it'],
+  [Ln, R, R, R, Ln],
+  purges.map((t) => {
+    const b = d.blocks.find((x) => x.id === t.block)
+    return [
+      b.name, hm(elapsed(t)), hm(overlapOf(t)), hm(total(t)),
+      t.overlapNote ?? '',
+    ]
+  }),
+  [
+    '**Total**',
+    `**${hm(sum(purges, (t) => elapsed(t)))}**`,
+    `**${hm(sum(purges, (t) => overlapOf(t)))}**`,
+    `**${hm(sum(purges, (t) => total(t)))}**`,
     '',
-  )
-}
-L.push(
-  `Daily totals are unaffected — an ordinary morning is still ${hm(blockTotal(d.blocks[0]))}.`,
-  'The correction lands in the weekly and annual roll-ups, which is exactly',
-  'where a double count would otherwise have gone unnoticed.',
-  '',
+  ],
 )
+P(`Only the counted column reaches the day. The rest is real time that a
+buried line would return.`)
 
-/* ---------- the decomposition ---------- */
-L.push('## What is inside each block', '')
+/* ---------- coops ---------- */
+L.push('## Units', '')
+P(`Durations are measured against a single unit, and the counts are kept
+here rather than folded into the times.`)
+table(
+  ['Unit', 'Count', 'Birds each'],
+  [Ln, R, R],
+  Object.values(U).map((v) => [v.label, v.default, v.birds ?? 'n/a']),
+)
+P(`Holding the two apart is what lets a change of equipment re-cost the
+whole day. Add a tractor and the morning grows by one round. Replace the
+tractors with a coop that holds ${U.coop600.birds} birds and the round is
+rewritten instead of multiplied.`)
+
+/* ---------- inside the blocks ---------- */
+L.push('## Inside the blocks', '')
+P(`Every block breaks down into tasks, and each task names the thing it
+scales with. The count column reads from the table above.`)
 for (const b of d.blocks) {
   const ts = tasksIn(b)
   if (!ts.length) continue
   L.push(`### ${b.name}`, '')
-  if (b.note) L.push(`*${b.note}*`, '')
-  L.push(
-    '| # | Task | Per unit | Scales with | Count | Total |',
-    '|---|---|---:|---|---:|---:|',
+  if (b.note) P(b.note)
+  table(
+    ['Task', 'Per unit', 'Scales with', 'Count', 'Total'],
+    [Ln, R, Ln, R, R],
+    ts.map((t) => {
+      const scale = t.scalesWith === 'fixed'
+        ? 'Nothing'
+        : U[t.scalesWith]?.label ?? t.scalesWith
+      const flag = t.overlap
+        ? ` *(${hm(overlapOf(t))} overlapped)*`
+        : t.absorbedBy ? ` *(${say(t.daysPerWeek)} days)*` : ''
+      return [
+        `${t.label}${dec(t.confidence)}${flag}`, hm(t.minutes), scale,
+        countFor(t), hm(total(t)),
+      ]
+    }),
+    ['**Block**', '', '', '', `**${hm(blockTotal(b))}**`],
   )
-  for (const t of ts) {
-    const n = countFor(t)
-    const scale = t.scalesWith === 'fixed'
-      ? 'Nothing'
-      : U[t.scalesWith]?.label ?? t.scalesWith
-    const flag = t.handsOff
-      ? ' *(hands-off)*'
-      : t.absorbedBy
-        ? ` *(${t.daysPerWeek}/7)*`
-        : ''
-    L.push(
-      `| ${t.id} | ${t.label}${dec(t.confidence)}${flag} | ${hm(t.minutes)} | ` +
-        `${scale} | ${n} | ${t.handsOff ? '—' : hm(total(t))} |`,
-    )
-  }
-  L.push('')
   for (const t of ts) {
     if (t.steps?.length) {
-      L.push(
-        `**${t.label}**, ${hm(t.minutes)} per unit: ` +
-          t.steps.map((s) => `${s.label.toLowerCase()} ${s.minutes}`).join(', ') +
-          '.',
-        '',
-      )
+      P(`The ${t.label.toLowerCase()} breaks down further.`)
+      for (const s of t.steps) LI(`${s.label}, ${hm(s.minutes)}.`)
+      L.push('')
     }
-    if (t.note) L.push(`> ${t.note}`, '')
+    if (t.note) P(t.note)
   }
 }
 
-/* ---------- what does not scale ---------- */
-const undecomposed = d.tasks.filter((t) => t.confidence === 'unknown')
-if (undecomposed.length) {
-  L.push('## The part that cannot yet be scaled', '')
-  L.push(
-    `${undecomposed.length} of ${d.blocks.length} daily blocks have never`,
-    'been broken into per-unit lines. They carry a duration and nothing',
-    'else, so they cannot be attributed between broilers and layers, and',
-    'they do not respond to a change of fleet. **Between them they are',
-    `${hm(undecomposed.reduce((n, t) => n + total(t), 0))} of the ` +
-      `${hm(daily)} day.**`,
-    '',
+/* ---------- enterprise split ---------- */
+const byEnt = {}
+for (const t of d.tasks) {
+  const k = t.enterprise ?? 'shared'
+  byEnt[k] = (byEnt[k] ?? 0) + total(t)
+}
+/** Shares must sum to 100, so the largest absorbs the rounding. */
+const entRows = Object.entries(E).filter(([k]) => byEnt[k])
+const shares = entRows.map(([k]) => Math.round((byEnt[k] / daily) * 100))
+const biggest = shares.indexOf(Math.max(...shares))
+shares[biggest] += 100 - shares.reduce((a, b) => a + b, 0)
+
+L.push('## Broilers and layers', '')
+P(`Because every task names an enterprise, the day divides between
+broilers and layers. The split shows what the laying flock costs on an
+ordinary day, before a single egg is washed.`)
+table(
+  ['Enterprise', 'Daily', 'Share'],
+  [Ln, R, R],
+  entRows.map(([k, label], i) => [label, hm(byEnt[k]), `${shares[i]}%`]),
+  ['**Day**', `**${hm(daily)}**`, ''],
+)
+P(`Egg washing and the annual collection figure sit outside this table,
+because they are counted once a year rather than inside a block.`)
+
+/* ---------- weekly ---------- */
+L.push('## Weekly load', '')
+P(`A week of blocks comes to ${hm(weekTotal)}, and its days are not
+identical. ${Say(moveWeekdays)} weekday carries the layer move, which
+swallows work that would otherwise stand on its own.`)
+P(`Work that happens inside other work is absorbed, and it is counted
+once.`)
+for (const t of absorbedTasks) {
+  const p = d.periodic.find((x) => x.id === t.absorbedBy)
+  P(`The ${t.label.toLowerCase()} runs ${say(t.daysPerWeek)} mornings
+instead of ${say(7)}. On the ${p.label.toLowerCase()} it happens inside the
+move, which is ${hm(total(t))} that must not be counted twice.`)
+}
+P(`An ordinary day is untouched. Absorption changes the weekly and annual
+roll-ups, where a double count would otherwise go unnoticed.`)
+
+/* ---------- move day ---------- */
+L.push('## Move day', '')
+P(`Move day is the longest day in an ordinary week. The coops are towed to
+fresh grass, the fence goes with them, and the waterers are washed and
+sanitized.`)
+for (const ph of moveDay.phases) {
+  L.push(`### ${ph.label}`, '')
+  table(
+    ['Step', 'Per unit', 'Units', 'Counted', 'Absorbed'],
+    [Ln, R, R, R, R],
+    ph.steps.map((s) => {
+      const a = swallowed(s)
+      return [
+        s.label, hm(s.minutes), stepCount(s),
+        billed(s) ? hm(billed(s)) : 'n/a', a ? hm(a) : 'n/a',
+      ]
+    }),
+    [
+      `**${ph.label}**`, '', '',
+      `**${hm(sum(ph.steps, (s) => billed(s)))}**`, '',
+    ],
   )
-  L.push('| # | Block | Duration |', '|---|---|---:|')
-  for (const t of undecomposed) {
-    const b = d.blocks.find((x) => x.id === t.block)
-    L.push(`| ${t.id} | ${b?.name ?? t.block} | ${hm(t.minutes)} |`)
+  for (const s of ph.steps) if (s.note) P(`**${s.label}.** ${s.note}`)
+}
+L.push('### Day total', '')
+table(
+  ['Part', 'Time'],
+  [Ln, R],
+  [
+    ['Ordinary chores, less what the move absorbs', hm(choresOnMoveDay)],
+    ['Move, wash and sanitize', hm(moveWork)],
+  ],
+  ['**Move day**', `**${hm(moveDayTotal)}**`],
+)
+
+if (absorbedSteps.length) {
+  P(`${hm(sum(absorbedSteps, (s) => swallowed(s)))} of the move is absorbed,
+because these steps happen inside another one rather than after it.`)
+  for (const s of absorbedSteps) {
+    const into = steps.find((x) => x.id === s.absorbedBy)
+    LI(`${s.label}, inside ${into?.label.toLowerCase()}.`)
   }
   L.push('')
 }
+P(`A third layer coop would add ${hm(marginal)} to move day.`)
 
 /* ---------- periodic ---------- */
-L.push('## Weekly, per batch, and per season', '')
-L.push('| # | Activity | Figure | Cadence | Who |', '|---|---|---:|---|---|')
+L.push('## Periodic work', '')
+P(`The rest of the work arrives on its own schedule rather than daily.`)
+table(
+  ['Activity', 'Figure', 'Cadence', 'Who'],
+  [Ln, R, Ln, Ln],
+  d.periodic.map((p) => {
+    const m = p.id === 'P01'
+      ? hm(moveDayTotal)
+      : p.id === 'P02' ? hm(marginal) : hm(p.minutes)
+    return [`${p.label}${dec(p.confidence)}`, m, p.cadence, p.who]
+  }),
+)
 for (const p of d.periodic) {
-  L.push(
-    `| ${p.id} | ${p.label}${dec(p.confidence)} | ${hm(p.minutes)} | ` +
-      `${p.cadence} | ${p.who} |`,
-  )
+  if (p.note && p.id !== 'P01') P(`**${p.label}.** ${p.note}`)
 }
-L.push('')
-for (const p of d.periodic) if (p.note) L.push(`**${p.label}.** ${p.note}`, '')
 
 /* ---------- locks ---------- */
-L.push('## What is locked before anyone chooses anything', '')
-L.push(
-  'A day off is not a day with no work. It is a day where every block',
-  "carries the other person's name. With",
-  `${d.blocks.length} blocks a day, that is **${d.blocks.length * 7} blocks`,
-  'a week, every one needing a name on it** — and four of them are settled',
-  'before the week is planned.',
-  '',
+L.push('## Locked blocks', '')
+P(`Some blocks are settled before anyone sits down to plan a week. On a
+day off every block carries the other person's name, and there are
+${d.blocks.length * 7} blocks in a week to name.`)
+table(
+  ['When', 'Whose', 'Because'],
+  [Ln, Ln, Ln],
+  d.locks.map((k) => [`${k.day}, ${k.block}`, k.who, k.because]),
 )
-L.push('| # | When | Whose | Because |', '|---|---|---|---|')
-for (const k of d.locks) {
-  L.push(`| ${k.id} | ${k.day}, ${k.block} | ${k.who} | ${k.because} |`)
-}
-L.push(
-  '',
-  '**Both days off must therefore be weekdays.** There are five, one is the',
-  'layer move, and four remain against four needs: James\' day off, Jim\'s',
-  'day off, and two consecutive desk days. Zero slack, before an hour of',
-  'maintenance, demand generation or CSA build has been placed anywhere.',
-  '',
-)
+P(`Both days off have to fall on weekdays, because the weekend mornings
+are already assigned. The layer move takes one of the
+${say(W.weekdays)}, which leaves ${say(freeWeekdays)} to carry James' day
+off, Jim's day off, and two consecutive desk days.`)
 
 /* ---------- conventions ---------- */
 L.push('## Conventions', '')
-for (const c of d.meta.conventions) L.push(`- ${c}`, '')
+P(d.meta.basis)
+for (const c of d.meta.conventions) LI(c)
+L.push('')
 
 /* ---------- blank ---------- */
-L.push('## What is still blank', '')
-for (const b of d.blank) L.push(`- ${b}`, '')
-L.push('', `*Source: ${d.meta.source}.*`, '')
+L.push('## Still blank', '')
+for (const b of d.blank) LI(b)
+L.push('')
 
 await mkdir(join(root, 'measures'), { recursive: true })
 await writeFile(join(root, 'measures', 'labor.md'), L.join('\n'))
 
-console.log(`labor  → measures/labor.md`)
+const ent = Object.entries(byEnt).map(([k, m]) => `${k} ${hm(m)}`).join(', ')
+console.log('labor  → measures/labor.md')
 console.log(
   `       ${d.blocks.length} blocks, ${d.tasks.length} tasks, ` +
-    `${d.periodic.length} periodic, ${hm(daily)} a day`,
+    `${d.periodic.length} periodic`,
 )
+console.log(`       ${hm(daily)} a day (${ent}), ${hm(weekTotal)} a week`)

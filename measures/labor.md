@@ -1,194 +1,301 @@
+---
+prev: { text: 'Measures', link: '/measures/' }
+next: { text: 'Goods', link: '/measures/goods' }
+---
+
 # Labor
 
-**The time study, as structured data.**
+**Labor** is the time the farm costs to run. It is recorded as chore blocks
+rather than as a total number of hours, because the limit that binds is how
+many separate times a day somebody has to be standing in a particular place.
 
-> **4 time-locked blocks a day, 5 h 12 of them**, before market prep, egg washing, processing or maintenance. The floor is not made of minutes; it is made of visits, and a block that shrinks to five minutes still owns the hour it sits in.
+A chore block is one of those times. Each block has an hour at which it must
+happen, a length that grows with the number of coops or tractors, and a
+person who has to be there. Shortening a block saves time inside the block.
+The block still has to be covered, and the shape of the day is unchanged.
 
-James' estimates from a season of doing the work, not stopwatch measurements.
+## Daily blocks
 
-## The fleet this is costed against
+A market departure and sundown fix two of the blocks, so an ordinary day
+cannot be rearranged freely.
+
+| Block | Anchor | Length | Can it slide |
+|---|---|---:|---|
+| Morning | 07:00 | 2 h 57 | No |
+| Noon | 12:00 | 45 min | A little |
+| Afternoon | 15:00 | 1 h 12.5 | A little |
+| Closing | dark | 37.5 min | No |
+| **Day** |  | **5 h 32** |  |
+
+## Line purge
+
+The line purge is the wait for standing water to clear before the birds can
+drink. Water in a long hose run holds heat, the wait comes at every pasture
+visit, and it does not go away without a buried line.
+
+What changes across the day is how much of that wait can be spent on
+something else.
+
+| Block | Wait | Overlapped | Counted | What overlaps it |
+|---|---:|---:|---:|---|
+| Morning | 10 min | 10 min | 0 min | The feeding and the tractor moves run alongside it. |
+| Noon | 10 min | 0 min | 10 min | Nothing else is in hand, so the wait is the whole of it. |
+| Afternoon | 10 min | 2.5 min | 7.5 min | Some feed can be topped off during the wait, but most of it is still waiting. |
+| Closing | 10 min | 0 min | 10 min | Nothing runs alongside it at this hour. |
+| **Total** | **40 min** | **12.5 min** | **27.5 min** |  |
+
+Only the counted column reaches the day. The rest is real time that a buried
+line would return.
+
+## Units
+
+Durations are measured against a single unit, and the counts are kept here
+rather than folded into the times.
 
 | Unit | Count | Birds each |
 |---|---:|---:|
 | Salatin tractor | 5 | 60 |
 | Model 600 | 0 | 900 |
-| Layer coop | 2 | — |
+| Layer coop | 2 | n/a |
 | Brooder | 1 | 900 |
 
-Every duration below is recorded **per unit**, with the count held here
-and nowhere else. Change the count and nothing needs re-measuring, which
-is the only version of this table that answers the scale question.
+Holding the two apart is what lets a change of equipment re-cost the whole
+day. Add a tractor and the morning grows by one round. Replace the tractors
+with a coop that holds 900 birds and the round is rewritten instead of
+multiplied.
 
-## The daily blocks
+## Inside the blocks
 
-| Block | Anchor | Duration | Slide |
-|---|---|---:|---|
-| **Morning** | 07:00 | 2 h 57 | Locked |
-| **Noon** | 12:00 | 35 min | Narrow |
-| **Afternoon** | 15:00 | 1 h 05 | Narrow |
-| **Closing** | dark | 35 min | Locked |
-| | | **5 h 12** | |
-
-Plus 10 min of hands-off time, which runs concurrently with
-other work and is therefore not added to the day.
-
-## The same blocks, across a week
-
-Seven days of blocks is **35 h 52**, plus 9 h 15 for
-the layer move. The two do not simply add:
-
-- **Layer coop round** runs 6 mornings, not seven. On the
-  layer move day it happens inside the move rather than on top
-  of it, which is 32 min that must not be counted twice.
-
-Daily totals are unaffected — an ordinary morning is still 2 h 57.
-The correction lands in the weekly and annual roll-ups, which is exactly
-where a double count would otherwise have gone unnoticed.
-
-## What is inside each block
+Every block breaks down into tasks, and each task names the thing it scales
+with. The count column reads from the table above.
 
 ### Morning
 
-*Cannot slide. Jim leaves for market at 6:30, so nobody can be at a market and a 7 am block at once.*
+| Task | Per unit | Scales with | Count | Total |
+|---|---:|---|---:|---:|
+| Brooder check<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 15 min | Brooder | 1 | 15 min |
+| Layer coop round<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> *(six days)* | 16 min | Layer coop | 2 | 32 min |
+| Broiler tractor round<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 25 min | Salatin tractor | 5 | 2 h 05 |
+| Electric fence<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 5 min | Nothing | 1 | 5 min |
+| Line purge<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> *(10 min overlapped)* | 10 min | Nothing | 1 | 0 min |
+| **Block** |  |  |  | **2 h 57** |
 
-| # | Task | Per unit | Scales with | Count | Total |
-|---|---|---:|---|---:|---:|
-| T01 | Brooder check<sup class="dec d-assumed-high" title="Assumed, high confidence">+2</sup> | 15 min | Brooder | 1 | 15 min |
-| T02 | Layer coop round<sup class="dec d-assumed-high" title="Assumed, high confidence">+2</sup> *(6/7)* | 16 min | Layer coop | 2 | 32 min |
-| T03 | Broiler tractor round<sup class="dec d-assumed-high" title="Assumed, high confidence">+2</sup> | 25 min | Salatin tractor | 5 | 2 h 05 |
-| T04 | Electric fence<sup class="dec d-assumed-high" title="Assumed, high confidence">+2</sup> | 5 min | Nothing | 1 | 5 min |
-| T05 | Line purge<sup class="dec d-assumed-high" title="Assumed, high confidence">+2</sup> *(hands-off)* | 10 min | Nothing | 1 | — |
+The broiler tractor round breaks down further.
 
-> On the layer move day this work happens inside the move rather than on top of it, so it runs six mornings a week and not seven. An ordinary morning is unaffected; the weekly roll-up is.
+- Prep, 10 min.
+- Move, 5 min.
+- Fill feeders, 5 min.
+- Refill water bucket, 5 min.
 
-**Broiler tractor round**, 25 min per unit: prep 10, move 5, fill feeders 5, refill water bucket 5.
-
-> Modelled at five full-size tractors. Observed reality is nearer two and a half hours because one of the five is undersized, but the modelled figure is the one that projects.
-
-> Not hose dragging. It is the wait for water standing in a long hose run to cool enough to give the birds. It never goes away without a buried line.
+The observed morning runs shorter than this, because one tractor is
+undersized and is quicker to fill and move. The modeled figure is the one
+that projects.
 
 ### Noon
 
-*Eggs and broiler water.*
+Broilers are checked at every pasture visit, because they drink fast enough
+that a missed check matters.
 
-| # | Task | Per unit | Scales with | Count | Total |
-|---|---|---:|---|---:|---:|
-| T06 | Noon block, undecomposed<sup class="dec d-unknown" title="Unknown">−3</sup> | 35 min | Nothing | 1 | 35 min |
+| Task | Per unit | Scales with | Count | Total |
+|---|---:|---|---:|---:|
+| Egg collection<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 10 min | Layer coop | 2 | 20 min |
+| Broiler water top-off<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> | 15 min | Nothing | 1 | 15 min |
+| Line purge<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 10 min | Nothing | 1 | 10 min |
+| **Block** |  |  |  | **45 min** |
 
-> Eggs and broiler water. Never broken into per-unit lines, so it cannot yet be scaled or attributed between enterprises.
+The top-off was recorded as a range, and it is carried at the top of that
+range.
 
 ### Afternoon
 
-*3:00 to 3:30 pm.*
+The afternoon block starts between 3:00 and 3:30 pm.
 
-| # | Task | Per unit | Scales with | Count | Total |
-|---|---|---:|---|---:|---:|
-| T07 | Afternoon block, undecomposed<sup class="dec d-unknown" title="Unknown">−3</sup> | 1 h 05 | Nothing | 1 | 1 h 05 |
+| Task | Per unit | Scales with | Count | Total |
+|---|---:|---|---:|---:|
+| Broiler water<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 10 min | Nothing | 1 | 10 min |
+| Layer water<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 10 min | Nothing | 1 | 10 min |
+| Egg collection<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 10 min | Layer coop | 2 | 20 min |
+| Broiler feed top-off<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 5 min | Salatin tractor | 5 | 25 min |
+| Line purge<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> *(2.5 min overlapped)* | 10 min | Nothing | 1 | 7.5 min |
+| **Block** |  |  |  | **1 h 12.5** |
 
-> Never broken into per-unit lines.
+Raising the perches in the nest boxes runs concurrently with the collection.
 
 ### Closing
 
-*8:30 to 9:00 pm in summer. Moves with the light.*
+The closing block falls between 8:30 and 9:00 pm in summer, and it moves
+with the light.
 
-| # | Task | Per unit | Scales with | Count | Total |
-|---|---|---:|---|---:|---:|
-| T08 | Closing block, undecomposed<sup class="dec d-unknown" title="Unknown">−3</sup> | 35 min | Nothing | 1 | 35 min |
+| Task | Per unit | Scales with | Count | Total |
+|---|---:|---|---:|---:|
+| Line purge<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 10 min | Nothing | 1 | 10 min |
+| Broiler water<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 3.5 min | Salatin tractor | 5 | 17.5 min |
+| Close layer coops<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 10 min | Nothing | 1 | 10 min |
+| **Block** |  |  |  | **37.5 min** |
 
-> Never broken into per-unit lines.
+Closing the coops is mostly travel time. Layer waterers are larger than the
+broiler buckets and are not refilled in the evening.
 
-## The part that cannot yet be scaled
+## Broilers and layers
 
-3 of 4 daily blocks have never
-been broken into per-unit lines. They carry a duration and nothing
-else, so they cannot be attributed between broilers and layers, and
-they do not respond to a change of fleet. **Between them they are
-2 h 15 of the 5 h 12 day.**
+Because every task names an enterprise, the day divides between broilers and
+layers. The split shows what the laying flock costs on an ordinary day,
+before a single egg is washed.
 
-| # | Block | Duration |
-|---|---|---:|
-| T06 | Noon | 35 min |
-| T07 | Afternoon | 1 h 05 |
-| T08 | Closing | 35 min |
+| Enterprise | Daily | Share |
+|---|---:|---:|
+| Broilers | 3 h 55 | 70% |
+| Layers | 1 h 32 | 28% |
+| Neither | 5 min | 2% |
+| **Day** | **5 h 32** |  |
 
-## Weekly, per batch, and per season
+Egg washing and the annual collection figure sit outside this table, because
+they are counted once a year rather than inside a block.
 
-| # | Activity | Figure | Cadence | Who |
-|---|---|---:|---|---|
-| P01 | Layer move day<sup class="dec d-assumed-high" title="Assumed, high confidence">+2</sup> | 9 h 15 | weekly | both |
-| P02 | Per-coop scaling cost, move only<sup class="dec d-assumed-low" title="Assumed, low confidence">−2</sup> | 58 min | per-coop-per-move | shared |
-| P03 | Brooder clean-out<sup class="dec d-assumed-high" title="Assumed, high confidence">+2</sup> | 1 h | per-batch | shared |
-| P04 | Brooder setup<sup class="dec d-assumed-high" title="Assumed, high confidence">+2</sup> | 1 h 30 | per-batch | shared |
-| P05 | Litter top-dress<sup class="dec d-assumed-high" title="Assumed, high confidence">+2</sup> | 30 min | per-10-days-brooding | shared |
-| P06 | Chick move-out<sup class="dec d-assumed-high" title="Assumed, high confidence">+2</sup> | 2 h 10 | per-batch | shared |
-| P07 | Catch and load<sup class="dec d-assumed-high" title="Assumed, high confidence">+2</sup> | 2 h | per-batch | both |
-| P08 | On site at drop-off and pickup<sup class="dec d-assumed-high" title="Assumed, high confidence">+2</sup> | 1 h | per-batch | shared |
-| P09 | Post-processing cleanup<sup class="dec d-assumed-high" title="Assumed, high confidence">+2</sup> | 2 h 10 | per-batch | shared |
-| P10 | Market cash-out<sup class="dec d-assumed-high" title="Assumed, high confidence">+2</sup> | 20 min | per-market-day | shared |
-| P11 | Feed delivery<sup class="dec d-assumed-high" title="Assumed, high confidence">+2</sup> | 45 min | per-pallet | shared |
-| P12 | Bedding collection run<sup class="dec d-assumed-low" title="Assumed, low confidence">−2</sup> | 1 h 22 | as-needed | shared |
-| P13 | Egg collection<sup class="dec d-assumed-high" title="Assumed, high confidence">+2</sup> | 254 h | annual | shared |
-| P14 | Egg washing<sup class="dec d-assumed-high" title="Assumed, high confidence">+2</sup> | 403 h | annual | jim |
-| P15 | Markets<sup class="dec d-assumed-high" title="Assumed, high confidence">+2</sup> | 392 h | annual | shared |
-| P16 | Mowing<sup class="dec d-assumed-low" title="Assumed, low confidence">−2</sup> | 195 h | annual | shared |
+## Weekly load
 
-**Layer move day.** One weekday morning. Needs both people.
+A week of blocks comes to 41 h, and its days are not identical. One weekday
+carries the layer move, which swallows work that would otherwise stand on
+its own.
 
-**Per-coop scaling cost, move only.** Once the fence share folds in.
+Work that happens inside other work is absorbed, and it is counted once.
 
-**Chick move-out.** Ten seconds a bird by hand regardless of equipment. At 900 birds a coop it becomes a two-and-a-half hour job on its own, and it is one of the few costs capital does not remove.
+The layer coop round runs six mornings instead of seven. On the layer move
+day it happens inside the move, which is 32 min that must not be counted
+twice.
 
-**Catch and load.** 277 birds, under two hours, two people.
+An ordinary day is untouched. Absorption changes the weekly and annual
+roll-ups, where a double count would otherwise go unnoticed.
 
-**Market cash-out.** 57 events in 2026, about 19 hours a year.
+## Move day
 
-**Egg collection.** 254 hours a year.
+Move day is the longest day in an ordinary week. The coops are towed to
+fresh grass, the fence goes with them, and the waterers are washed and
+sanitized.
 
-**Egg washing.** 403 hours a year.
+### Move
 
-**Markets.** 392 hours a year.
+| Step | Per unit | Units | Counted | Absorbed |
+|---|---:|---:|---:|---:|
+| Move fence | 22.5 min | 2 | 45 min | n/a |
+| Drawbar hookup | 8 min | 1 | 8 min | n/a |
+| Tow coop | 10 min | 2 | 20 min | n/a |
+| Shift feeders, waterers, grit | 15 min | 2 | n/a | 30 min |
+| **Move** |  |  | **1 h 13** |  |
 
-**Mowing.** 195 hours a year.
+**Move fence.** The fence moves as a single unit rather than per coop, but
+it grows with coop count, so it is modeled per coop.
 
-## What is locked before anyone chooses anything
+**Drawbar hookup.** The hookup was recorded as a range and is carried near
+its midpoint, because a flat step held to the half minute is false
+precision.
 
-A day off is not a day with no work. It is a day where every block
-carries the other person's name. With
-4 blocks a day, that is **28 blocks
-a week, every one needing a name on it** — and four of them are settled
-before the week is planned.
+### Wash and sanitize
 
-| # | When | Whose | Because |
-|---|---|---|---|
-| L1 | Saturday, B1 | james | Jim leaves for market at 6:30. |
-| L2 | Sunday, B1 | james | Jim leaves for market at 6:30. |
-| L3 | Wednesday, B4 | jim | James is at Tilted Barn until 8:30. |
-| L4 | any-weekday, P01 | both | The layer move needs both people. |
+| Step | Per unit | Units | Counted | Absorbed |
+|---|---:|---:|---:|---:|
+| Power washer setup | 15 min | 1 | 15 min | n/a |
+| Power wash waterers | 30 min | 2 | 1 h | n/a |
+| Mix sanitizer | 5 min | 2 | 10 min | n/a |
+| Soak waterers | 10 min | 2 | 10 min | 10 min |
+| **Wash and sanitize** |  |  | **1 h 35** |  |
 
-**Both days off must therefore be weekdays.** There are five, one is the
-layer move, and four remain against four needs: James' day off, Jim's
-day off, and two consecutive desk days. Zero slack, before an hour of
-maintenance, demand generation or CSA build has been placed anywhere.
+**Power washer setup.** Fuel and water line.
+
+**Power wash waterers.** The figure covers every waterer the coop carries.
+
+**Mix sanitizer.** A low-concentration bleach solution.
+
+**Soak waterers.** The soak is per coop rather than per waterer, and all but
+one of the soaks happen inside the power wash.
+
+### Day total
+
+| Part | Time |
+|---|---:|
+| Ordinary chores, less what the move absorbs | 5 h |
+| Move, wash and sanitize | 2 h 48 |
+| **Move day** | **7 h 48** |
+
+40 min of the move is absorbed, because these steps happen inside another
+one rather than after it.
+
+- Shift feeders, waterers, grit, inside move fence.
+- Soak waterers, inside power wash waterers.
+
+A third layer coop would add 1 h 08 to move day.
+
+## Periodic work
+
+The rest of the work arrives on its own schedule rather than daily.
+
+| Activity | Figure | Cadence | Who |
+|---|---:|---|---|
+| Layer move day<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 7 h 48 | weekly | both |
+| Per-coop scaling cost<sup class="dec d-projected" data-tip="Projected" tabindex="0">P</sup> | 1 h 08 | per added layer coop | shared |
+| Brooder clean-out<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 1 h | per batch | shared |
+| Brooder setup<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 1 h 30 | per batch | shared |
+| Litter top-dress<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 30 min | every 10 days brooding | shared |
+| Chick move-out<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 2 h 10 | per batch | shared |
+| Catch and load<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 2 h | per batch | both |
+| On site at drop-off and pickup<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 1 h | per batch | shared |
+| Post-processing cleanup<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 2 h 10 | per batch | shared |
+| Market cash-out<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 20 min | per market day | shared |
+| Feed delivery<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> | 45 min | per delivery | shared |
+| Bedding collection run<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> | 1 h 22 | as needed | shared |
+| Egg collection<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 254 h | annual | shared |
+| Egg washing<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 403 h | annual | jim |
+| Markets<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 392 h | annual | shared |
+| Mowing<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> | 195 h | annual | shared |
+
+**Chick move-out.** Move-out runs at about ten seconds a bird by hand
+whatever the equipment, so it grows with the flock and is one of the few
+costs capital does not remove.
+
+**Catch and load.** Measured on a full batch with two people.
+
+**Egg collection.** Twice daily is the baseline. Collection rises to three
+times through July, and to four in extreme heat.
+
+## Locked blocks
+
+Some blocks are settled before anyone sits down to plan a week. On a day off
+every block carries the other person's name, and there are 28 blocks in a
+week to name.
+
+| When | Whose | Because |
+|---|---|---|
+| Saturday, Morning | James | Jim leaves for market at 6:30 and cannot cover it. |
+| Sunday, Morning | James | Jim leaves for market at 6:30 and cannot cover it. |
+| Wednesday, Closing | Jim | James is at Tilted Barn until 8:30. |
+| One weekday, Layer move | Both | The move cannot be done by one person. |
+
+Both days off have to fall on weekdays, because the weekend mornings are
+already assigned. The layer move takes one of the five, which leaves four to
+carry James' day off, Jim's day off, and two consecutive desk days.
 
 ## Conventions
 
-- Per unit, with the count held separately. A change in count then needs no re-measurement, which is the only version that answers the scale question.
+These are James' estimates from a season of doing the work rather than
+stopwatch measurements, and they are recorded at the precision they were
+given.
 
-- Fixed per-visit overhead is recorded apart, because it does not scale with unit count and gets cheaper per bird as the farm grows.
+- Durations are recorded per unit, with the counts held separately. A change
+  in count then re-costs the day without anyone measuring it again.
+- Fixed per-visit overhead is recorded apart, because it does not scale with
+  unit count and gets cheaper per bird as the farm grows.
+- Overlap is recorded per task. Time that runs alongside other work is real,
+  and adding it to the total would say the day is longer than it is.
+- *Who* is recorded as shared, Jim, or James. Nearly everything is shared,
+  because there are no assigned chore blocks and work falls to whoever is
+  present.
 
-- Hands-off time carries its own flag. The line purge and egg drying run concurrently with other work, and recording them as additive would overstate the day.
+## Still blank
 
-- Who takes one of three values: shared, Jim, or James. Nearly everything is shared, because there are no chore blocks and work falls to whoever is present.
-
-## What is still blank
-
-- Maintenance. Blocked rather than unknown: building the schedule is one afternoon, and the operation has no way to allocate an afternoon.
-
-- Administrative hours. Unknowable without Jim.
-
-- The noon, afternoon and closing blocks have never been decomposed per unit, so three of the four daily blocks cannot yet be scaled or attributed.
-
-- The definition of available rather than possible. If available is set at what two exhausted people can endure, the calculation will conclude that no capital is needed, and the farm will grind itself down proving it.
-
-
-*Source: Built by walking a normal farm day in voice, 26 August 2026.*
+- Maintenance is blocked rather than unknown, because building the schedule
+  is one afternoon's work and the operation has no way to allocate an
+  afternoon.
+- Administrative hours are unknowable without Jim.
+- *Available* has not been defined against *possible*. If available is set
+  at the maximum two people can sustain, the calculation will conclude that
+  no capital is needed.
