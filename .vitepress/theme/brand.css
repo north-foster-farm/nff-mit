@@ -68,6 +68,15 @@
 .vp-doc { font-size: 18px; line-height: 1.75; }
 .vp-doc table { font-size: 16px; }
 .vp-doc th, .vp-doc td { padding: 10px 18px; }
+
+/* The header row names the columns, so it should read before the cells
+   rather than after them. */
+.vp-doc th {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: .01em;
+  color: var(--vp-c-text-1);
+}
 .vp-doc h1 { font-size: 37px; }
 .vp-doc h2 { font-size: 27px; }
 .vp-doc h3 { font-size: 22px; }
@@ -101,47 +110,52 @@
 }
 @media (max-width:640px){ .VPNavBarTitle .title > span::after{display:none} }
 
-/* Confidence, load and KPI marks. They ride as superscripts to the right
-   of whatever they qualify, so they have to stay small and stay quiet:
-   the number is the content, the mark is an annotation on it. */
+/* Confidence, load and KPI marks. They ride as superscripts against the
+   word they qualify, close enough to read as attached to it. Color alone
+   carries the rung: no badge, no border, nothing that competes with the
+   figure itself. */
 .vp-doc .dec{
-  /* IBM Plex Mono has no U+21B1, so the arrow needs a symbol fallback
-     ahead of the browser's last-resort box. */
-  font-family:"IBM Plex Mono","Apple Symbols","Segoe UI Symbol",
-    ui-monospace,monospace;
-  font-size:.62em;font-weight:600;line-height:0;
-  letter-spacing:.02em;vertical-align:super;
-  margin-left:.28em;padding:.18em .34em;
-  border-radius:3px;white-space:nowrap;cursor:help;
-  border:1px solid transparent;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:12px;font-weight:600;line-height:0;
+  letter-spacing:.01em;vertical-align:super;
+  margin-left:.1em;padding:0;
+  white-space:nowrap;cursor:pointer;
+  background:none;border:0;border-radius:0;
 }
-.vp-doc h2 .dec,.vp-doc h3 .dec{font-size:.46em}
+.vp-doc .dec:focus-visible{
+  outline:2px solid var(--vp-c-brand-1);outline-offset:2px;border-radius:2px}
 
 /* Above neutral: the mark carries color, weakening as it descends. */
-.vp-doc .d-verified{color:#0d2e20;background:var(--vp-c-brand-3)}
-.vp-doc .d-assumed-high{
-  color:var(--vp-c-brand-1);background:var(--vp-c-brand-soft);
-  border-color:var(--vp-c-brand-3)}
+.vp-doc .d-verified{color:var(--vp-c-brand-2)}
+.vp-doc .d-assumed-high{color:var(--vp-c-brand-1)}
 
-/* Derived rather than observed. Outlined, so they read as a different
-   kind of claim rather than a better or worse one. */
-.vp-doc .d-forecast,.vp-doc .d-projected{
-  color:var(--vp-c-text-1);background:transparent;
-  border-color:var(--vp-c-border)}
+/* Derived rather than observed. Muted, so they read as a different kind
+   of claim rather than a better or worse one. */
+.vp-doc .d-forecast,.vp-doc .d-projected{color:var(--vp-c-text-2)}
 
-/* Below neutral: no fill, fading toward the background. */
-.vp-doc .d-assumed-low{color:var(--vp-c-text-2)}
-.vp-doc .d-guess{
-  color:#f0c674;background:rgba(240,198,116,.12);
-  border-color:rgba(240,198,116,.3)}
-.vp-doc .d-unknown{
-  color:#e88b7d;background:rgba(232,139,125,.12);
-  border-color:rgba(232,139,125,.3)}
+/* Below neutral, fading toward the background and then to warning. */
+.vp-doc .d-assumed-low{color:var(--vp-c-text-3)}
+.vp-doc .d-guess{color:#f0c674}
+.vp-doc .d-unknown{color:#e88b7d}
 
-.vp-doc .d-load{color:var(--vp-c-text-3);background:var(--vp-c-bg-soft)}
-.vp-doc .d-kpi{
-  color:var(--vp-c-brand-1);background:transparent;
-  border-color:var(--vp-c-brand-3)}
+.vp-doc .d-load{color:var(--vp-c-text-3)}
+.vp-doc .d-kpi{color:var(--vp-c-brand-1)}
+
+/* The tooltip the theme renders for a mark. One node, moved and filled
+   on hover, so the page carries no per-mark markup. */
+.dec-tip{
+  position:fixed;z-index:60;pointer-events:none;
+  padding:6px 10px;border-radius:6px;
+  background:var(--vp-c-bg-elv);color:var(--vp-c-text-1);
+  border:1px solid var(--vp-c-divider);
+  box-shadow:0 6px 20px rgba(0,0,0,.35);
+  font-size:13px;line-height:1.35;font-weight:500;
+  white-space:nowrap;
+  opacity:0;transform:translateY(3px);
+  transition:opacity .12s ease,transform .12s ease;
+}
+.dec-tip.is-on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){ .dec-tip{transition:none} }
 
 /* Every sidebar group folds. Without an explicit `collapsed` key the
    theme renders a group as a fixed heading with no control, which made

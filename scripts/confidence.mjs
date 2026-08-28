@@ -7,7 +7,7 @@
 //   +2 −2     assumed, high and low confidence
 //   −3        unknown
 //   ?         a guess
-//   ↱F ↱P     derived rather than observed: forecast, projection
+//   F  P      derived rather than observed: forecast, projection
 //   ⧉KPI      a measure of how well the plan is being executed
 //
 // +1 and −1 are deliberately unallocated. The scheme has more slots than
@@ -26,8 +26,8 @@ export const LADDER = [
 
 export const MARK = {
   verified: '+3',
-  forecast: '↱F',
-  projected: '↱P',
+  forecast: 'F',
+  projected: 'P',
   'assumed-high': '+2',
   'assumed-low': '−2',
   guess: '?',
@@ -60,14 +60,17 @@ export const NOTE = {
 export const rank = (k) => LADDER.indexOf(k)
 export const MAX_RANK = LADDER.length - 1
 
+// The meaning rides in data-tip rather than title. The native tooltip is
+// slow, unstyled, and unreachable from the keyboard. The theme renders
+// its own from this attribute, and the mark takes focus on tab.
+const mark = (cls, tip, glyph) =>
+  `<sup class="dec ${cls}" data-tip="${tip}" tabindex="0">${glyph}</sup>`
+
 /** A confidence decoration, as inline HTML for the markdown renderers. */
-export const dec = (k) =>
-  `<sup class="dec d-${k}" title="${LABEL[k]}">${MARK[k]}</sup>`
+export const dec = (k) => mark(`d-${k}`, LABEL[k], MARK[k])
 
 /** The KPI decoration. Orthogonal to confidence, so it stacks. */
-export const KPI = '<sup class="dec d-kpi" title="Key performance ' +
-  'indicator">⧉KPI</sup>'
+export const KPI = mark('d-kpi', 'Key performance indicator', 'KPI')
 
 /** Load, one to five, as a decoration of the same family. */
-export const load = (n) =>
-  `<sup class="dec d-load" title="Load ${n} of 5">L${n}</sup>`
+export const load = (n) => mark('d-load', `Load ${n} of 5`, `L${n}`)
