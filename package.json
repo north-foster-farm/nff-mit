@@ -1,0 +1,27 @@
+{
+  "name": "nff-mit",
+  "version": "0.1.0",
+  "description": "North Foster Farm — Model Integration Tool",
+  "type": "module",
+  "scripts": {
+    "registers": "node scripts/build-labor.mjs",
+    "dev": "vitepress dev .",
+    "dev:scenarios": "vite --config apps/scenarios/vite.config.mjs",
+    "docs": "vitepress build .",
+    "scenarios": "vite build --config apps/scenarios/vite.config.mjs",
+    "shell": "node scripts/build-shell.mjs",
+    "build": "npm run registers && npm run docs && npm run scenarios && npm run shell",
+    "serve": "npm run build && node scripts/serve.mjs",
+    "open": "node scripts/serve.mjs"
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "devDependencies": {
+    "vite": "^5.4.11",
+    "vitepress": "^1.6.4"
+  },
+  "dependencies": {
+    "d3": "^7.9.0",
+    "markdown-it-mathjax3": "^4.3.2"
+  }
+}

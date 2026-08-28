@@ -1,0 +1,168 @@
+/* NFF brand palette, sampled from the 2026 business card and logo proofs.
+   #194D37 forest · #1E7B54 brand green · #37AD7C mint · #D6F5E0 pale mint */
+
+:root {
+  --nff-forest: #194d37;
+  --nff-brand: #1e7b54;
+  --nff-mint: #37ad7c;
+  --nff-pale: #d6f5e0;
+
+  --vp-c-brand-1: #14603f;
+  --vp-c-brand-2: #1e7b54;
+  --vp-c-brand-3: #37ad7c;
+  --vp-c-brand-soft: rgba(55, 173, 124, 0.14);
+
+  --vp-c-tip-1: var(--vp-c-brand-1);
+  --vp-c-tip-soft: var(--vp-c-brand-soft);
+
+  --vp-font-family-base: Montserrat, ui-sans-serif, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vp-font-family-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular,
+    monospace;
+}
+
+.dark {
+  --vp-c-bg: #143d2c;
+  --vp-c-bg-alt: #103123;
+  --vp-c-bg-soft: #1a4b37;
+  --vp-c-bg-elv: #1a4b37;
+
+  --vp-c-brand-1: #6fd2a5;
+  --vp-c-brand-2: #37ad7c;
+  --vp-c-brand-3: #1e7b54;
+
+  --vp-c-text-1: #e6faee;
+  --vp-c-text-2: #a8cfba;
+  --vp-c-text-3: #7ba892;
+
+  --vp-c-divider: rgba(214, 245, 224, 0.12);
+  --vp-c-gutter: rgba(214, 245, 224, 0.08);
+  --vp-c-border: rgba(214, 245, 224, 0.18);
+}
+
+/* The status line each article opens with, and the callout blockquotes,
+   are load-bearing in this wiki — give them real emphasis. */
+.vp-doc blockquote {
+  border-left: 3px solid var(--vp-c-brand-3);
+  background: var(--vp-c-brand-soft);
+  padding: 14px 18px;
+  border-radius: 0 8px 8px 0;
+}
+.vp-doc blockquote > p:first-child {
+  margin-top: 0;
+}
+.vp-doc blockquote > p:last-child {
+  margin-bottom: 0;
+}
+
+.vp-doc table {
+  display: table;
+  width: 100%;
+}
+
+/* ---------- type scale ----------
+   The default theme's smallest body text is the 14px table cell. The
+   floor is 16px, so everything in the content column moves by 8/7 and
+   the relationships between sizes are preserved. Sizes are px in the
+   default theme, so each one has to be restated rather than inherited. */
+.vp-doc { font-size: 18px; line-height: 1.75; }
+.vp-doc table { font-size: 16px; }
+.vp-doc th, .vp-doc td { padding: 10px 18px; }
+.vp-doc h1 { font-size: 37px; }
+.vp-doc h2 { font-size: 27px; }
+.vp-doc h3 { font-size: 22px; }
+.vp-doc h4 { font-size: 19px; }
+.vp-doc :not(pre) > code { font-size: 0.87em; }
+.vp-doc div[class*='language-'] code { font-size: 16px; }
+.vp-doc blockquote { font-size: 18px; }
+
+/* The chrome moves with it, or the content looks pasted in. */
+.VPSidebarItem .text { font-size: 16px; }
+.VPSidebarItem.level-0 > .item > .text { font-size: 15px; }
+.VPDocOutlineItem a { font-size: 15px; }
+.VPDocAsideOutline .outline-title { font-size: 15px; }
+.VPNavBarMenuLink, .VPNavBarMenuGroup .button { font-size: 16px; }
+.VPMenuLink .link { font-size: 15px; }
+
+/* The wordmark is the theme's own logo + siteTitle, so the header holds
+   exactly one anchor. The second line is generated, not an element. */
+.VPNavBarTitle .title{
+  display:flex;align-items:center;gap:11px;
+  letter-spacing:.08em;font-weight:700;
+}
+.VPNavBarTitle .title .logo{width:32px;height:32px;margin:0;flex:none}
+.VPNavBarTitle .title > span{
+  display:flex;flex-direction:column;gap:3px;font-size:17px;line-height:1;
+}
+.VPNavBarTitle .title > span::after{
+  content:"Model Integration Tool";
+  font-size:8.5px;font-weight:600;letter-spacing:.19em;line-height:1;
+  text-transform:uppercase;color:var(--vp-c-text-3);white-space:nowrap;
+}
+@media (max-width:640px){ .VPNavBarTitle .title > span::after{display:none} }
+
+/* Confidence, load and KPI marks. They ride as superscripts to the right
+   of whatever they qualify, so they have to stay small and stay quiet:
+   the number is the content, the mark is an annotation on it. */
+.vp-doc .dec{
+  /* IBM Plex Mono has no U+21B1, so the arrow needs a symbol fallback
+     ahead of the browser's last-resort box. */
+  font-family:"IBM Plex Mono","Apple Symbols","Segoe UI Symbol",
+    ui-monospace,monospace;
+  font-size:.62em;font-weight:600;line-height:0;
+  letter-spacing:.02em;vertical-align:super;
+  margin-left:.28em;padding:.18em .34em;
+  border-radius:3px;white-space:nowrap;cursor:help;
+  border:1px solid transparent;
+}
+.vp-doc h2 .dec,.vp-doc h3 .dec{font-size:.46em}
+
+/* Above neutral: the mark carries color, weakening as it descends. */
+.vp-doc .d-verified{color:#0d2e20;background:var(--vp-c-brand-3)}
+.vp-doc .d-assumed-high{
+  color:var(--vp-c-brand-1);background:var(--vp-c-brand-soft);
+  border-color:var(--vp-c-brand-3)}
+
+/* Derived rather than observed. Outlined, so they read as a different
+   kind of claim rather than a better or worse one. */
+.vp-doc .d-forecast,.vp-doc .d-projected{
+  color:var(--vp-c-text-1);background:transparent;
+  border-color:var(--vp-c-border)}
+
+/* Below neutral: no fill, fading toward the background. */
+.vp-doc .d-assumed-low{color:var(--vp-c-text-2)}
+.vp-doc .d-guess{
+  color:#f0c674;background:rgba(240,198,116,.12);
+  border-color:rgba(240,198,116,.3)}
+.vp-doc .d-unknown{
+  color:#e88b7d;background:rgba(232,139,125,.12);
+  border-color:rgba(232,139,125,.3)}
+
+.vp-doc .d-load{color:var(--vp-c-text-3);background:var(--vp-c-bg-soft)}
+.vp-doc .d-kpi{
+  color:var(--vp-c-brand-1);background:transparent;
+  border-color:var(--vp-c-brand-3)}
+
+/* Every sidebar group folds. Without an explicit `collapsed` key the
+   theme renders a group as a fixed heading with no control, which made
+   the first group on every page unfoldable. */
+.VPSidebarItem.level-0 > .item > .indicator{opacity:1}
+
+
+@media (min-width:960px){
+  .VPNavBar.has-sidebar .title{width:auto;padding-right:24px}
+}
+
+/* Search ships between the title and the menu, which leaves it stranded in
+   the middle of the bar. Move it into the controls group on the right,
+   immediately before the light/dark toggle. */
+@media (min-width:768px){
+  .VPNavBar .content-body{gap:0}
+  .VPNavBarMenu{order:1}
+  .VPNavBarTranslations{order:2}
+  .VPNavBarSearch{order:3;flex-grow:0;padding-left:22px;min-width:0}
+  .VPNavBarAppearance{order:4}
+  .VPNavBarSocialLinks{order:5}
+  .VPNavBarExtra{order:6}
+  .VPNavBarSearch .DocSearch-Button{margin:0}
+}
