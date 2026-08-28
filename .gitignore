@@ -6,5 +6,6 @@ import/inbound/
 .DS_Store
 
 # Local secrets for the access gate. Never commit.
-.env
-.env.*
+# Deliberately broader than .env and .env.*, which between them miss
+# names like .env_production.
+.env*

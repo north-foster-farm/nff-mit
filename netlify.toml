@@ -1,0 +1,25 @@
+# The site is private. Access is enforced by the edge function in
+# netlify/edge-functions/gate.ts, which declares its own path (/*) and
+# runs ahead of every static file. Its four secrets live in the Netlify
+# UI under Site configuration → Environment variables, never here.
+#
+# Response headers are not set here. dashboard/_headers is copied into
+# build/ by scripts/build-shell.mjs and remains the only place they live.
+
+[build]
+  command = "npm run build"
+  publish = "build"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# `netlify dev` runs the real gate against the real build on
+# http://localhost:8888. Browsers treat localhost as a secure origin, so
+# the Secure cookie still sets, and Google accepts a localhost redirect
+# URI — add http://localhost:8888/__auth/callback to the OAuth client to
+# exercise the whole flow without deploying.
+[dev]
+  command = "npm run serve"
+  targetPort = 4321
+  publish = "build"
+  framework = "#custom"
