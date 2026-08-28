@@ -84,7 +84,10 @@ export default defineConfig({
       '/calculations/': [
         {
           text: 'Calculations',
-          items: [{ text: 'Figures and equations', link: '/calculations/' }],
+          items: [
+            { text: 'Index', link: '/calculations/' },
+            { text: 'Capacity options', link: '/calculations/options' },
+          ],
         },
       ],
       '/model/': [

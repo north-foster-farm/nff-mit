@@ -1,0 +1,178 @@
+{
+  "meta": {
+    "title": "Capacity options",
+    "nav": {
+      "prev": {
+        "text": "Calculations",
+        "link": "/calculations/"
+      },
+      "next": false
+    },
+    "basis": "Costs are James' figures for equipment the farm has either built before or been quoted for.",
+    "financing": {
+      "rate": 5.25,
+      "term": 7,
+      "product": "FSA direct Farm Operating",
+      "asOf": "August 2026",
+      "confidence": "verified",
+      "note": "FSA announces its rates monthly, so this figure carries the month it was read.",
+      "alternatives": [
+        {
+          "label": "FSA direct Farm Ownership",
+          "low": 6,
+          "high": 6
+        },
+        {
+          "label": "FSA Farm Storage Facility, 7 year",
+          "low": 4.375,
+          "high": 4.375
+        },
+        {
+          "label": "Bank or credit union, well qualified",
+          "low": 6,
+          "high": 12
+        },
+        {
+          "label": "SBA 7(a), variable",
+          "low": 9.75,
+          "high": 13.25
+        }
+      ]
+    }
+  },
+  "options": [
+    {
+      "id": "OPT-TRACTOR",
+      "label": "Salatin tractor",
+      "unit": "tractor",
+      "repeatable": true,
+      "confidence": "assumed-high",
+      "summary": "The farm already runs five of these and builds them on site.",
+      "capital": [
+        {
+          "label": "Materials",
+          "amount": 1000,
+          "count": 1,
+          "confidence": "assumed-low",
+          "note": "Materials cover lumber and its delivery, corrugated aluminum, chicken wire, and hardware."
+        },
+        {
+          "label": "Trough",
+          "amount": 30,
+          "count": 3,
+          "confidence": "assumed-low"
+        },
+        {
+          "label": "Plasson bell waterer",
+          "amount": 60,
+          "count": 1,
+          "confidence": "assumed-high"
+        },
+        {
+          "label": "Reservoir bucket",
+          "amount": 13,
+          "count": 1,
+          "confidence": "assumed-high",
+          "note": "The reservoir bucket is food grade."
+        }
+      ],
+      "buildLabor": [
+        {
+          "label": "Build",
+          "hours": 12,
+          "count": 1,
+          "confidence": "assumed-low"
+        },
+        {
+          "label": "Trough",
+          "hours": 1.5,
+          "count": 3,
+          "confidence": "assumed-low"
+        }
+      ],
+      "financing": [
+        "owner"
+      ],
+      "power": "none"
+    },
+    {
+      "id": "OPT-M600",
+      "label": "Model 600",
+      "unit": "coop600",
+      "repeatable": true,
+      "max": 2,
+      "confidence": "assumed-low",
+      "summary": "The Model 600 is a manufactured coop that carries its own feed and water.",
+      "quotedAs": "a pair",
+      "quotedPrice": 56300,
+      "capital": [
+        {
+          "label": "Coop, options and delivery",
+          "amount": 28150,
+          "count": 1,
+          "confidence": "assumed-low"
+        }
+      ],
+      "buildLabor": [
+        {
+          "label": "Assembly",
+          "hours": 25,
+          "count": 1,
+          "confidence": "assumed-low"
+        }
+      ],
+      "financing": [
+        "owner",
+        "loan"
+      ],
+      "power": "battery",
+      "halvedNote": "The quote covers a pair, and both the price and the assembly hours are carried here at half so a single coop can be costed on its own. Delivery sits inside the quoted price and may not halve as cleanly as the rest."
+    }
+  ],
+  "fleets": [
+    {
+      "label": "As it stands",
+      "tractor": 5,
+      "coop600": 0
+    },
+    {
+      "label": "One more tractor",
+      "tractor": 6,
+      "coop600": 0
+    },
+    {
+      "label": "Tractors and one coop",
+      "tractor": 5,
+      "coop600": 1
+    },
+    {
+      "label": "One coop alone",
+      "tractor": 0,
+      "coop600": 1
+    },
+    {
+      "label": "Two coops alone",
+      "tractor": 0,
+      "coop600": 2
+    }
+  ],
+  "splits": [
+    1,
+    0.5
+  ],
+  "blank": [
+    "The labor rate is unset. Build hours are counted but never priced, because no rate has been agreed for the owners' own time.",
+    "The second coop has never had to win the argument against the capacity the 2027 plan asks for.",
+    "Eligibility is unresolved. FSA products are not interchangeable, and which one a mobile coop qualifies for is a question for the county office rather than a figure to assume."
+  ],
+  "purchases": [
+    {
+      "label": "The pair",
+      "of": 2
+    },
+    {
+      "label": "One coop",
+      "of": 1
+    }
+  ]
+}
