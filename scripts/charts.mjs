@@ -12,6 +12,7 @@
 // reaches the client.
 
 import { scaleLinear } from 'd3-scale'
+import { line as d3line, curveMonotoneX } from 'd3-shape'
 
 const esc = (s) =>
   String(s)
@@ -113,6 +114,92 @@ export function barChart(bars, opts = {}) {
       `</g>`,
     )
   })
+
+  out.push(`<line class="chart-axis" x1="0" x2="${w}" y1="${h}" y2="${h}"/>`)
+  out.push('</g>', '</svg>')
+  if (caption) out.push(`<figcaption>${esc(caption)}</figcaption>`)
+  out.push('</figure>')
+  return out.join('')
+}
+
+/**
+ * A line chart, for a quantity that varies continuously against another.
+ *
+ * points: [{ x, y, title }]
+ * mark:   an optional { x, label } to call out one position on the curve
+ */
+export function lineChart(points, opts = {}) {
+  const {
+    width = 720,
+    height = 230,
+    margin = { top: 22, right: 14, bottom: 40, left: 58 },
+    formatX = (n) => `${n}`,
+    formatY = (n) => `${n}`,
+    yLabel = '',
+    caption = '',
+    mark = null,
+  } = opts
+
+  const w = width - margin.left - margin.right
+  const h = height - margin.top - margin.bottom
+
+  const xs = points.map((p) => p.x)
+  const ys = points.map((p) => p.y)
+  const x = scaleLinear().domain([Math.min(...xs), Math.max(...xs)]).range([0, w])
+  const y = scaleLinear().domain([0, Math.max(...ys)]).nice(4).range([h, 0])
+
+  const path = d3line()
+    .x((p) => x(p.x))
+    .y((p) => y(p.y))
+    .curve(curveMonotoneX)(points)
+
+  const out = []
+  out.push(
+    `<figure class="chart">`,
+    `<svg viewBox="0 0 ${width} ${height}" role="img"` +
+      (yLabel ? ` aria-label="${esc(yLabel)}"` : '') + `>`,
+    `<g transform="translate(${margin.left} ${margin.top})">`,
+  )
+
+  for (const t of y.ticks(4)) {
+    out.push(
+      `<line class="chart-grid" x1="0" x2="${w}" ` +
+        `y1="${y(t).toFixed(1)}" y2="${y(t).toFixed(1)}"/>`,
+      `<text class="chart-tick" x="-10" y="${y(t).toFixed(1)}" ` +
+        `dy="0.32em" text-anchor="end">${esc(formatY(t))}</text>`,
+    )
+  }
+  for (const t of x.ticks(6)) {
+    out.push(
+      `<text class="chart-label" x="${x(t).toFixed(1)}" y="${h + 20}" ` +
+        `text-anchor="middle">${esc(formatX(t))}</text>`,
+    )
+  }
+
+  // The called-out position is drawn under the curve, so the line reads
+  // continuously across it rather than being interrupted by its own note.
+  if (mark) {
+    const mx = x(mark.x).toFixed(1)
+    out.push(
+      `<line class="chart-mark" x1="${mx}" x2="${mx}" y1="0" y2="${h}"/>`,
+      `<text class="chart-marklabel" x="${mx}" y="-8" ` +
+        `text-anchor="middle">${esc(mark.label)}</text>`,
+    )
+  }
+
+  out.push(`<path class="chart-line" d="${path}"/>`)
+
+  for (const p of points) {
+    out.push(`<g class="chart-pt">`)
+    if (p.title) out.push(`<title>${esc(p.title)}</title>`)
+    out.push(
+      `<circle class="chart-dot" cx="${x(p.x).toFixed(1)}" ` +
+        `cy="${y(p.y).toFixed(1)}" r="3.5"/>`,
+      `<circle class="chart-hit" cx="${x(p.x).toFixed(1)}" ` +
+        `cy="${y(p.y).toFixed(1)}" r="14"/>`,
+      `</g>`,
+    )
+  }
 
   out.push(`<line class="chart-axis" x1="0" x2="${w}" y1="${h}" y2="${h}"/>`)
   out.push('</g>', '</svg>')

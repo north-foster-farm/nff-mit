@@ -1,5 +1,5 @@
 ---
-prev: { text: 'Figures', link: '/calculations/figures' }
+prev: { text: 'Equations', link: '/calculations/equations' }
 next: false
 ---
 

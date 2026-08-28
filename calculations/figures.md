@@ -1,6 +1,6 @@
 ---
 prev: { text: 'Calculations', link: '/calculations/' }
-next: { text: 'Capacity options', link: '/calculations/options' }
+next: { text: 'Equations', link: '/calculations/equations' }
 ---
 
 # Figures

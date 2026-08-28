@@ -1,0 +1,90 @@
+{
+  "meta": {
+    "title": "Equations",
+    "nav": {
+      "prev": {
+        "text": "Figures",
+        "link": "/calculations/figures"
+      },
+      "next": {
+        "text": "Capacity options",
+        "link": "/calculations/options"
+      }
+    },
+    "direction": "The chain runs backwards, from the wage the owners want to the number of birds that pays it. Working forwards tells you what happens if things go well. Working backwards tells you what has to be true."
+  },
+  "decisions": [
+    {
+      "id": "D01",
+      "label": "Owner draw",
+      "value": 70000,
+      "unit": "money",
+      "note": "The wage the owners take out of the business in a year. The figure is provisional. The chain shows what it costs, not whether it is right."
+    },
+    {
+      "id": "D02",
+      "label": "Owners",
+      "value": 2,
+      "unit": "count"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "I01",
+      "label": "Sell-through",
+      "value": 0.85,
+      "unit": "share",
+      "confidence": "assumed-low",
+      "range": [
+        0.6,
+        1
+      ],
+      "step": 0.05,
+      "note": "The share of what is raised that is eventually sold. It has never been measured. Everything raised is paid for whether or not it sells."
+    }
+  ],
+  "unset": [
+    {
+      "id": "U01",
+      "label": "Tax",
+      "note": "In a pass-through entity tax is owed on business profit whether or not the cash reached anyone, so it cannot be an afterthought. No rate has been set."
+    },
+    {
+      "id": "U02",
+      "label": "Capital reserve",
+      "note": "The next coop, the next freezer, the truck when it dies. No figure has been set."
+    }
+  ],
+  "steps": [
+    {
+      "id": "E01",
+      "label": "Draw a person",
+      "expr": "D01 / D02"
+    },
+    {
+      "id": "E02",
+      "label": "Revenue a bird sold",
+      "expr": "F10 * I01"
+    },
+    {
+      "id": "E03",
+      "label": "Contribution a bird",
+      "expr": "E02 - F20"
+    },
+    {
+      "id": "E04",
+      "label": "Margin the year must clear",
+      "expr": "D01 + F25"
+    },
+    {
+      "id": "E05",
+      "label": "Birds required",
+      "expr": "E04 / E03"
+    }
+  ],
+  "blank": [
+    "Tax and a capital reserve are both missing from the margin the year has to clear.",
+    "Debt service enters only if a coop is financed. The [capacity options](/calculations/options) carry that arithmetic.",
+    "How many times the pasture turns over in a season is not settled anywhere in the model, so the bird count has no batch calendar behind it yet."
+  ]
+}
