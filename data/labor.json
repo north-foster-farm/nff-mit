@@ -1,0 +1,193 @@
+{
+  "meta": {
+    "title": "Labor",
+    "subtitle": "The time study, as structured data",
+    "source": "Built by walking a normal farm day in voice, 26 August 2026",
+    "basis": "James' estimates from a season of doing the work, not stopwatch measurements.",
+    "conventions": [
+      "Per unit, with the count held separately. A change in count then needs no re-measurement, which is the only version that answers the scale question.",
+      "Fixed per-visit overhead is recorded apart, because it does not scale with unit count and gets cheaper per bird as the farm grows.",
+      "Hands-off time carries its own flag. The line purge and egg drying run concurrently with other work, and recording them as additive would overstate the day.",
+      "Who takes one of three values: shared, Jim, or James. Nearly everything is shared, because there are no chore blocks and work falls to whoever is present."
+    ],
+    "units": {
+      "tractor": { "label": "Salatin tractor", "birds": 60, "default": 5 },
+      "coop600": { "label": "Model 600", "birds": 900, "default": 0 },
+      "layerCoop": { "label": "Layer coop", "default": 2 },
+      "brooder": { "label": "Brooder", "birds": 900, "default": 1 }
+    }
+  },
+
+  "blocks": [
+    {
+      "id": "B1",
+      "name": "Morning",
+      "anchor": "07:00",
+      "slide": "none",
+      "note": "Cannot slide. Jim leaves for market at 6:30, so nobody can be at a market and a 7 am block at once.",
+      "frequency": "daily",
+      "season": "all"
+    },
+    {
+      "id": "B2",
+      "name": "Noon",
+      "anchor": "12:00",
+      "slide": "narrow",
+      "note": "Eggs and broiler water.",
+      "frequency": "daily",
+      "season": "all"
+    },
+    {
+      "id": "B3",
+      "name": "Afternoon",
+      "anchor": "15:00",
+      "slide": "narrow",
+      "note": "3:00 to 3:30 pm.",
+      "frequency": "daily",
+      "season": "all"
+    },
+    {
+      "id": "B4",
+      "name": "Closing",
+      "anchor": "dark",
+      "slide": "none",
+      "note": "8:30 to 9:00 pm in summer. Moves with the light.",
+      "frequency": "daily",
+      "season": "all"
+    }
+  ],
+
+  "tasks": [
+    {
+      "id": "T01",
+      "block": "B1",
+      "label": "Brooder check",
+      "minutes": 15,
+      "scalesWith": "brooder",
+      "who": "shared",
+      "handsOff": false,
+      "activeWhile": "brooding",
+      "confidence": "assumed-high"
+    },
+    {
+      "id": "T02",
+      "block": "B1",
+      "label": "Layer coop round",
+      "minutes": 16,
+      "scalesWith": "layerCoop",
+      "who": "shared",
+      "handsOff": false,
+      "enterprise": "layer",
+      "confidence": "assumed-high",
+      "absorbedBy": "P01",
+      "daysPerWeek": 6,
+      "note": "On the layer move day this work happens inside the move rather than on top of it, so it runs six mornings a week and not seven. An ordinary morning is unaffected; the weekly roll-up is."
+    },
+    {
+      "id": "T03",
+      "block": "B1",
+      "label": "Broiler tractor round",
+      "minutes": 25,
+      "scalesWith": "tractor",
+      "who": "shared",
+      "handsOff": false,
+      "enterprise": "broiler",
+      "confidence": "assumed-high",
+      "steps": [
+        { "label": "Prep", "minutes": 10 },
+        { "label": "Move", "minutes": 5 },
+        { "label": "Fill feeders", "minutes": 5 },
+        { "label": "Refill water bucket", "minutes": 5 }
+      ],
+      "note": "Modelled at five full-size tractors. Observed reality is nearer two and a half hours because one of the five is undersized, but the modelled figure is the one that projects."
+    },
+    {
+      "id": "T04",
+      "block": "B1",
+      "label": "Electric fence",
+      "minutes": 5,
+      "scalesWith": "fixed",
+      "who": "shared",
+      "handsOff": false,
+      "confidence": "assumed-high"
+    },
+    {
+      "id": "T05",
+      "block": "B1",
+      "label": "Line purge",
+      "minutes": 10,
+      "scalesWith": "fixed",
+      "who": "shared",
+      "handsOff": true,
+      "confidence": "assumed-high",
+      "note": "Not hose dragging. It is the wait for water standing in a long hose run to cool enough to give the birds. It never goes away without a buried line.",
+      "killedBy": ["OPT-POWER"]
+    },
+    {
+      "id": "T06",
+      "block": "B2",
+      "label": "Noon block, undecomposed",
+      "minutes": 35,
+      "scalesWith": "fixed",
+      "who": "shared",
+      "handsOff": false,
+      "confidence": "unknown",
+      "note": "Eggs and broiler water. Never broken into per-unit lines, so it cannot yet be scaled or attributed between enterprises."
+    },
+    {
+      "id": "T07",
+      "block": "B3",
+      "label": "Afternoon block, undecomposed",
+      "minutes": 65,
+      "scalesWith": "fixed",
+      "who": "shared",
+      "handsOff": false,
+      "confidence": "unknown",
+      "note": "Never broken into per-unit lines."
+    },
+    {
+      "id": "T08",
+      "block": "B4",
+      "label": "Closing block, undecomposed",
+      "minutes": 35,
+      "scalesWith": "fixed",
+      "who": "shared",
+      "handsOff": false,
+      "confidence": "unknown",
+      "note": "Never broken into per-unit lines."
+    }
+  ],
+
+  "periodic": [
+    { "id": "P01", "label": "Layer move day", "minutes": 555, "cadence": "weekly", "who": "both", "enterprise": "layer", "confidence": "assumed-high", "note": "One weekday morning. Needs both people." },
+    { "id": "P02", "label": "Per-coop scaling cost, move only", "minutes": 58, "cadence": "per-coop-per-move", "who": "shared", "confidence": "assumed-low", "note": "Once the fence share folds in." },
+    { "id": "P03", "label": "Brooder clean-out", "minutes": 60, "cadence": "per-batch", "who": "shared", "enterprise": "broiler", "confidence": "assumed-high" },
+    { "id": "P04", "label": "Brooder setup", "minutes": 90, "cadence": "per-batch", "who": "shared", "enterprise": "broiler", "confidence": "assumed-high" },
+    { "id": "P05", "label": "Litter top-dress", "minutes": 30, "cadence": "per-10-days-brooding", "who": "shared", "enterprise": "broiler", "confidence": "assumed-high" },
+    { "id": "P06", "label": "Chick move-out", "minutes": 130, "cadence": "per-batch", "who": "shared", "enterprise": "broiler", "confidence": "assumed-high", "note": "Ten seconds a bird by hand regardless of equipment. At 900 birds a coop it becomes a two-and-a-half hour job on its own, and it is one of the few costs capital does not remove." },
+    { "id": "P07", "label": "Catch and load", "minutes": 120, "cadence": "per-batch", "who": "both", "enterprise": "broiler", "confidence": "assumed-high", "note": "277 birds, under two hours, two people." },
+    { "id": "P08", "label": "On site at drop-off and pickup", "minutes": 60, "cadence": "per-batch", "who": "shared", "enterprise": "broiler", "confidence": "assumed-high" },
+    { "id": "P09", "label": "Post-processing cleanup", "minutes": 130, "cadence": "per-batch", "who": "shared", "enterprise": "broiler", "confidence": "assumed-high" },
+    { "id": "P10", "label": "Market cash-out", "minutes": 20, "cadence": "per-market-day", "who": "shared", "confidence": "assumed-high", "note": "57 events in 2026, about 19 hours a year." },
+    { "id": "P11", "label": "Feed delivery", "minutes": 45, "cadence": "per-pallet", "who": "shared", "confidence": "assumed-high" },
+    { "id": "P12", "label": "Bedding collection run", "minutes": 82, "cadence": "as-needed", "who": "shared", "confidence": "assumed-low" },
+    { "id": "P13", "label": "Egg collection", "minutes": 15240, "cadence": "annual", "who": "shared", "enterprise": "layer", "confidence": "assumed-high", "note": "254 hours a year." },
+    { "id": "P14", "label": "Egg washing", "minutes": 24180, "cadence": "annual", "who": "jim", "enterprise": "layer", "confidence": "assumed-high", "note": "403 hours a year." },
+    { "id": "P15", "label": "Markets", "minutes": 23520, "cadence": "annual", "who": "shared", "confidence": "assumed-high", "note": "392 hours a year." },
+    { "id": "P16", "label": "Mowing", "minutes": 11700, "cadence": "annual", "who": "shared", "confidence": "assumed-low", "note": "195 hours a year." }
+  ],
+
+  "locks": [
+    { "id": "L1", "day": "Saturday", "block": "B1", "who": "james", "because": "Jim leaves for market at 6:30." },
+    { "id": "L2", "day": "Sunday", "block": "B1", "who": "james", "because": "Jim leaves for market at 6:30." },
+    { "id": "L3", "day": "Wednesday", "block": "B4", "who": "jim", "because": "James is at Tilted Barn until 8:30." },
+    { "id": "L4", "day": "any-weekday", "block": "P01", "who": "both", "because": "The layer move needs both people." }
+  ],
+
+  "blank": [
+    "Maintenance. Blocked rather than unknown: building the schedule is one afternoon, and the operation has no way to allocate an afternoon.",
+    "Administrative hours. Unknowable without Jim.",
+    "The noon, afternoon and closing blocks have never been decomposed per unit, so three of the four daily blocks cannot yet be scaled or attributed.",
+    "The definition of available rather than possible. If available is set at what two exhausted people can endure, the calculation will conclude that no capital is needed, and the farm will grind itself down proving it."
+  ]
+}
