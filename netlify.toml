@@ -19,7 +19,9 @@
 # URI — add http://localhost:8888/__auth/callback to the OAuth client to
 # exercise the whole flow without deploying.
 [dev]
-  command = "npm run serve"
+  # NO_OPEN, because serve.mjs opens a browser at its own port and
+  # `netlify dev` opens another at the port the gate actually runs on.
+  command = "NO_OPEN=1 npm run serve"
   targetPort = 4321
   publish = "build"
   framework = "#custom"
