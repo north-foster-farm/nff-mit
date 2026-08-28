@@ -4,3 +4,7 @@ import/inbound/
 .vitepress/cache/
 .vitepress/dist/
 .DS_Store
+
+# Local secrets for the access gate. Never commit.
+.env
+.env.*
