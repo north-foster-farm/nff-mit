@@ -1,5 +1,5 @@
 # Costs
 
-Not yet built. Blocked on the receipts pass — the overhead list has never
-been built from statements, and every overhead figure in the old model was
-invented.
+Not yet built, and blocked on the receipts pass. The overhead list has
+never been built from statements, and every overhead figure in the earlier
+model was invented.
