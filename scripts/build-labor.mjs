@@ -11,28 +11,18 @@
 // Table convention, applied everywhere: a header row naming every column,
 // and a total row whose first cell says what is being totalled.
 
-import { readFile, writeFile, mkdir } from 'node:fs/promises'
+import { writeFile, mkdir } from 'node:fs/promises'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { dec } from './confidence.mjs'
+import { loadLabor, hm } from './labor-model.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
-const d = JSON.parse(await readFile(join(root, 'data', 'labor.json'), 'utf8'))
-const U = d.meta.units
+const M = await loadLabor()
+const d = M.d
+const U = M.units
 const E = d.meta.enterprises
 const W = d.meta.week
-
-/** Minutes as h/min, the way the farm says them. Half minutes survive,
- *  because a per-unit figure of 22.5 rounded to 23 stops reconciling
- *  against the total it was measured from. */
-const mins = (m) => (Number.isInteger(m) ? `${m}` : m.toFixed(1))
-const pad = (m) => (m < 10 ? `0${mins(m)}` : mins(m))
-const hm = (m) => {
-  const h = Math.floor(m / 60)
-  const r = m % 60
-  if (!h) return `${mins(r)} min`
-  return r ? `${h} h ${pad(r)}` : `${h} h`
-}
 
 const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
   'eight', 'nine', 'ten']
@@ -74,25 +64,9 @@ const table = (head, align, rows, totalRow) => {
 const R = '---:'
 const Ln = '---'
 
-const fleet = Object.fromEntries(
-  Object.entries(U).map(([k, v]) => [k, v.default]),
-)
+const { fleet, countFor, total, elapsed, overlapOf, tasksIn, blockTotal } = M
 
-const countFor = (t, f = fleet) =>
-  t.scalesWith === 'fixed' ? 1 : (f[t.scalesWith] ?? 0)
-
-/** Minutes that add to the day. Overlap is time that runs alongside other
- *  work, so it is real and it is not additive. */
-const perUnitBilled = (t) => t.minutes - (t.overlap ?? 0)
-const total = (t, f = fleet) => perUnitBilled(t) * countFor(t, f)
-const elapsed = (t, f = fleet) => t.minutes * countFor(t, f)
-const overlapOf = (t, f = fleet) => (t.overlap ?? 0) * countFor(t, f)
-
-const tasksIn = (b) => d.tasks.filter((t) => t.block === b.id)
-const blockTotal = (b, f = fleet) =>
-  tasksIn(b).reduce((n, t) => n + total(t, f), 0)
-
-const daily = d.blocks.reduce((n, b) => n + blockTotal(b), 0)
+const daily = M.dayTotal()
 const purges = d.tasks.filter((t) => t.purge)
 const lockedBlocks = d.blocks.filter((b) => b.slide === 'none')
 

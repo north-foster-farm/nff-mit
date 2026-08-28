@@ -15,8 +15,8 @@
       "next": { "text": "Goods", "link": "/measures/goods" }
     },
     "units": {
-      "tractor": { "label": "Salatin tractor", "birds": 60, "default": 5 },
-      "coop600": { "label": "Model 600", "birds": 900, "default": 0 },
+      "tractor": { "label": "Salatin tractor", "birds": 60, "default": 5, "pasture": true },
+      "coop600": { "label": "Model 600", "birds": 900, "default": 0, "pasture": true },
       "layerCoop": { "label": "Layer coop", "default": 2 },
       "brooder": { "label": "Brooder", "birds": 900, "default": 1 }
     },
@@ -118,12 +118,24 @@
       "confidence": "assumed-high"
     },
     {
+      "id": "T17",
+      "block": "B1",
+      "label": "Model 600 move",
+      "minutes": 30,
+      "scalesWith": "coop600",
+      "who": "shared",
+      "enterprise": "broiler",
+      "confidence": "assumed-low",
+      "note": "The move replaces the tractor round rather than shortening it. A coop carries its own feed and water, so nothing else in the day is spent on the birds it holds."
+    },
+    {
       "id": "T05",
       "block": "B1",
       "label": "Line purge",
       "minutes": 10,
       "overlap": 10,
       "scalesWith": "fixed",
+      "dependsOn": "tractor",
       "who": "shared",
       "enterprise": "broiler",
       "confidence": "assumed-high",
@@ -148,6 +160,7 @@
       "label": "Broiler water top-off",
       "minutes": 15,
       "scalesWith": "fixed",
+      "dependsOn": "tractor",
       "who": "shared",
       "enterprise": "broiler",
       "confidence": "assumed-low",
@@ -160,6 +173,7 @@
       "minutes": 10,
       "overlap": 0,
       "scalesWith": "fixed",
+      "dependsOn": "tractor",
       "who": "shared",
       "enterprise": "broiler",
       "confidence": "assumed-high",
@@ -174,6 +188,7 @@
       "label": "Broiler water",
       "minutes": 10,
       "scalesWith": "fixed",
+      "dependsOn": "tractor",
       "who": "shared",
       "enterprise": "broiler",
       "confidence": "assumed-high"
@@ -216,6 +231,7 @@
       "minutes": 10,
       "overlap": 2.5,
       "scalesWith": "fixed",
+      "dependsOn": "tractor",
       "who": "shared",
       "enterprise": "broiler",
       "confidence": "assumed-high",
@@ -231,6 +247,7 @@
       "minutes": 10,
       "overlap": 0,
       "scalesWith": "fixed",
+      "dependsOn": "tractor",
       "who": "shared",
       "enterprise": "broiler",
       "confidence": "assumed-high",

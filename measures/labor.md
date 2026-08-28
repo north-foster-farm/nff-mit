@@ -77,6 +77,7 @@ with. The count column reads from the table above.
 | Layer coop round<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> *(six days)* | 16 min | Layer coop | 2 | 32 min |
 | Broiler tractor round<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 25 min | Salatin tractor | 5 | 2 h 05 |
 | Electric fence<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> | 5 min | Nothing | 1 | 5 min |
+| Model 600 move<sup class="dec d-assumed-low" data-tip="Assumed, low confidence" tabindex="0">−2</sup> | 30 min | Model 600 | 0 | 0 min |
 | Line purge<sup class="dec d-assumed-high" data-tip="Assumed, high confidence" tabindex="0">+2</sup> *(10 min overlapped)* | 10 min | Nothing | 1 | 0 min |
 | **Block** |  |  |  | **2 h 57** |
 
@@ -90,6 +91,10 @@ The broiler tractor round breaks down further.
 The observed morning runs shorter than this, because one tractor is
 undersized and is quicker to fill and move. The modeled figure is the one
 that projects.
+
+The move replaces the tractor round rather than shortening it. A coop
+carries its own feed and water, so nothing else in the day is spent on the
+birds it holds.
 
 ### Noon
 

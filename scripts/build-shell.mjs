@@ -9,6 +9,7 @@ import { readFile, writeFile, mkdir, cp, readdir } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { loadLabor, hm } from './labor-model.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const out = join(root, 'build')
@@ -39,24 +40,15 @@ const written = async (dir, unbuilt = 'Not built') => {
   return `${n} ${n === 1 ? 'page' : 'pages'}`
 }
 
-const hm = (m) => {
-  const h = Math.floor(m / 60)
-  const r = Math.round(m % 60)
-  return r ? `${h} h ${String(r).padStart(2, '0')}` : `${h} h`
-}
-
-/* ---------- labor ---------- */
+/* ---------- labor ----------
+   The length of the day is computed by labor-model.mjs and nowhere else.
+   This tile used to do its own arithmetic, and when the data grew an
+   overlap field the tile went on ignoring it, advertising a day thirteen
+   minutes longer than the article said. */
 let laborStamp = 'Not built'
 if (has('data/labor.json')) {
-  const d = await read('data/labor.json')
-  const fleet = Object.fromEntries(
-    Object.entries(d.meta.units).map(([k, v]) => [k, v.default]),
-  )
-  const count = (t) => (t.scalesWith === 'fixed' ? 1 : fleet[t.scalesWith] ?? 0)
-  const daily = d.tasks
-    .filter((t) => !t.handsOff)
-    .reduce((n, t) => n + t.minutes * count(t), 0)
-  laborStamp = `${hm(daily)} a day`
+  const M = await loadLabor()
+  laborStamp = `${hm(M.dayTotal())} a day`
 }
 
 const STAMPS = {
