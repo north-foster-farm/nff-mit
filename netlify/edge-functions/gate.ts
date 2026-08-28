@@ -9,7 +9,9 @@
 //   GOOGLE_CLIENT_ID      OAuth 2.0 web client
 //   GOOGLE_CLIENT_SECRET  its secret
 //   SESSION_SECRET        32+ random bytes, base64 or hex, our own
-//   ALLOWED_DOMAIN        Workspace domain, e.g. northfosterfarm.com
+//   ALLOWED_DOMAIN        the Workspace domain to admit. Do not write
+//                         its value here: the build scans the repo for
+//                         every environment value and fails on a match.
 // Optional:
 //   ALLOWED_EMAILS        comma-separated addresses outside the domain
 //   SESSION_HOURS         session lifetime, default 12
