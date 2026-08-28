@@ -6,7 +6,10 @@
         "text": "Equations",
         "link": "/calculations/equations"
       },
-      "next": false
+      "next": {
+        "text": "Model",
+        "link": "/model/"
+      }
     },
     "basis": "Costs are James' figures for equipment the farm has either built before or been quoted for.",
     "financing": {

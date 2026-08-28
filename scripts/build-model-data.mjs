@@ -70,6 +70,26 @@ const groups = [
   },
 ]
 
+groups.push({
+  id: 'fleet',
+  label: 'Fleet',
+  note: 'What the equipment holds at once. Raising it is what the '
+    + 'capacity options buy.',
+  items: [{
+    id: 'CAP',
+    label: 'Birds on pasture at once',
+    value: M.capacity(),
+    kind: 'figure',
+    unit: 'birds',
+    min: 0,
+    max: 2100,
+    step: 60,
+    from: '/calculations/options',
+    note: 'The fleet as it stands. A coop raises it by '
+      + `${M.units.coop600.birds} and a tractor by ${M.units.tractor.birds}.`,
+  }],
+})
+
 const base = {}
 for (const g of groups) for (const it of g.items) base[it.id] = it.value
 

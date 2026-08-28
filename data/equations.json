@@ -96,6 +96,15 @@
       "a": "E04",
       "b": "E03",
       "show": "birds"
+    },
+    {
+      "id": "E06",
+      "label": "Times the fleet must fill",
+      "op": "div",
+      "a": "E05",
+      "b": "CAP",
+      "show": "times",
+      "link": "/calculations/options"
     }
   ],
   "blank": [

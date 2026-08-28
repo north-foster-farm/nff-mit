@@ -161,6 +161,7 @@ export const format = (n, unit) => {
     case 'cents': return `$${n.toFixed(2)}`
     case 'share': return `${Math.round(n * 100)}%`
     case 'birds': return commas(Math.round(n))
+    case 'times': return `${n.toFixed(1)}`
     case 'count': return commas(n)
     default: return commas(Math.round(n * 100) / 100)
   }

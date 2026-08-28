@@ -48,7 +48,7 @@ const I01 = eq.inputs.find((i) => i.id === 'I01')
 const run = (sellThrough) =>
   runChain(eq.steps, {
     D01: D01.value, D02: D02.value, I01: sellThrough,
-    F10: F10.n, F20: F20.n, F25: F25.n,
+    F10: F10.n, F20: F20.n, F25: F25.n, CAP: M.capacity(),
   })
 const now = run(I01.value)
 
@@ -57,7 +57,8 @@ const now = run(I01.value)
  *  it excludes. */
 const breakEven = Math.ceil((F20.n / F10.n) * 100) / 100
 
-const shown = { money, cents, birds }
+const times = (n) => n.toFixed(1)
+const shown = { money, cents, birds, times }
 
 /* ---------- page ---------- */
 push(...nav(eq.meta.nav))

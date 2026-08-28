@@ -5,7 +5,7 @@ next: { text: 'Capacity options', link: '/calculations/options' }
 
 # Equations
 
-The **equations** are five steps from the wage the owners want to the number
+The **equations** are six steps from the wage the owners want to the number
 of birds that pays it. The chain runs backwards, from the wage the owners
 want to the number of birds that pays it. Working forwards tells you what
 happens if things go well. Working backwards tells you what has to be true.
@@ -45,6 +45,7 @@ Every step is a decision, a figure, or the result of a step above it.
 | E03 | [Contribution a bird](/measures/costs) | E02 − F20 | $20.52 |
 | E04 | Margin the year must clear | D01 + F25 | $72,190 |
 | E05 | Birds required | E04 ÷ E03 | 3,518 |
+| E06 | [Times the fleet must fill](/calculations/options) | E05 ÷ CAP | 11.7 |
 
 The bird count is a floor. tax and a capital reserve are both missing from
 E04, and no figure the chain cites rests on a document.

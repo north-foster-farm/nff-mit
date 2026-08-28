@@ -1,6 +1,6 @@
 ---
 prev: { text: 'Equations', link: '/calculations/equations' }
-next: false
+next: { text: 'Model', link: '/model/' }
 ---
 
 # Capacity options
