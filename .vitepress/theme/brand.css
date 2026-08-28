@@ -55,9 +55,19 @@
   margin-bottom: 0;
 }
 
+/* The default theme ships tables as `display: block; overflow-x: auto`,
+   which scrolls but never fills the column. Overriding that to
+   `display: table` filled the column and took the scrolling away, so a
+   six-column table pushed the whole page sideways on a phone.
+   `fit-content` capped at the column keeps both: a table sizes to its
+   content, stops at the edge of the prose, and scrolls inside its own box
+   rather than dragging the page with it. */
 .vp-doc table {
-  display: table;
-  width: 100%;
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
 }
 
 /* ---------- type scale ----------
@@ -194,6 +204,13 @@
 }
 .dec-tip.is-on{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){ .dec-tip{transition:none} }
+
+
+/* The nav dropdown was overlapping the bar it hangs from. The default
+   theme puts it at half the nav height plus twenty, which assumes a bar
+   with no visible bottom edge. This one has a divider, so the panel has
+   to start where the bar stops. */
+.VPNavBar .VPFlyout .menu{top:var(--vp-nav-height)}
 
 /* Every sidebar group folds. Without an explicit `collapsed` key the
    theme renders a group as a fixed heading with no control, which made
