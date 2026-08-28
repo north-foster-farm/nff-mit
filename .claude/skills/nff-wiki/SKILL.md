@@ -1,20 +1,19 @@
 ---
 name: nff-wiki
-description: Write or revise any prose in the MIT — wiki articles, model and plan sections, register copy, presentation text. Covers the purpose of an article, the shape of a page, the voice, the banned constructions, Wikipedia text formatting, and the rule that no number is ever typed into a sentence. Use before writing the first line, not after.
+description: Write or revise any prose in the MIT: wiki articles, model and plan sections, register copy, presentation text. Covers the purpose of an article, the shape of a page, the voice, the banned constructions, Wikipedia text formatting, and the rule that no number is ever typed into a sentence. Use before writing the first line, not after.
 ---
 
 # Writing for the MIT
 
 ## Purpose
 
-The wiki supports the business model and the business plan. It does that
-by educating, explaining, and illustrating the concepts that fall out of
-them.
+The wiki supports the business model and the business plan. It educates,
+explains and illustrates the concepts that fall out of them.
 
-A model tells you that contribution per bird is $25.74. The wiki tells
-you what contribution is, why it is not the same as profit, and what has
-to happen before that number can be trusted. Someone should be able to
-read the model with the wiki open beside it and follow every move.
+A model tells you the contribution per bird. The wiki tells you what
+contribution is, why it is not the same as profit, and what has to happen
+before that number can be trusted. Someone should be able to read the
+model with the wiki open beside it and follow every move.
 
 James decides which articles exist. Do not audit the library or argue a
 page out of existence. Each article still needs a single subject, and
@@ -22,14 +21,17 @@ anything that belongs to a second subject belongs on a second page.
 
 ## Voice
 
-Write the way a good sixth grade teacher explains something to a class
-that is paying attention. Simple, articulate, and never talking down.
-Short words where short words work. Define a term the first time it
-appears. Assume intelligence and curiosity, and assume no prior
-knowledge of farming or finance.
+Teach a twelfth grader the same information. Clear, unhurried and exact,
+with no padding and no simplification that costs accuracy. Full
+sentences, real vocabulary, and a term defined the first time it appears.
 
-Neutral throughout. The wiki explains what a thing is and how it works.
-It does not sell the plan.
+Assume competence. The reader knows what a chicken and an invoice are, so
+explaining the obvious wastes their time and makes the article longer
+than the subject deserves. Explain the concepts this model invents, and
+leave the rest alone.
+
+The voice stays neutral throughout. The wiki explains what a thing is and
+how it works. It does not sell the plan.
 
 ## Shape of a page
 
@@ -106,7 +108,7 @@ Treat every violation as a defect rather than a preference.
 - Concrete nouns over abstractions, prefer gentle and matter-of-fact to
   strong and attention-grabbing.
 - No hedging unless the uncertainty is real, and then state it plainly.
-- Close without summary. Never restate the thesis at the end.
+- Close without summary. Never restate the thesis.
 
 ## Mechanics
 
@@ -115,7 +117,7 @@ Treat every violation as a defect rather than a preference.
 
 ## Text formatting
 
-From the Wikipedia Manual of Style, [Text formatting][mos].
+These rules follow the Wikipedia Manual of Style, [Text formatting][mos].
 
 **Bold** is for the subject of the article at its first appearance in
 the lead, and for terms that redirect to it. Bold is not for emphasis in
@@ -133,9 +135,13 @@ Where emphasis is added, mark it.
 Never use all caps, small caps, or underlining for emphasis. Underlining
 reads as a link. Prose text is never colored.
 
+This document is the one exception, and it declares it here. A rules file
+is read by somebody scanning for the rule they need, so each rule opens
+with its name in bold. Articles do not get that licence.
+
 [mos]: https://en.wikipedia.org/wiki/Wikipedia:Manual_of_Style/Text_formatting
 
-## Show it, do not only say it
+## Structure over prose
 
 Reach for a structure before another paragraph. Unordered lists, tables,
 diagrams, charts and graphs all carry relationships that prose has to
@@ -145,7 +151,7 @@ sequence of stages is a diagram. A distribution is a chart.
 Prose explains what the structure means. It does not repeat what the
 structure already shows.
 
-## Numbers never live in prose
+## Numbers
 
 **Never type a number into a sentence.** A figure appears as a citation
 to the register, carrying its confidence mark, or it does not appear.
@@ -158,6 +164,11 @@ This extends to **threshold verbs**. *Clears*, *falls short*, *covers*,
 from the register too, or the sentence is rewritten so it does not
 assert. When a passage cannot survive without stating a value, that
 passage belongs in the model where the value is live.
+
+**Typed, not computed.** A generated page may interpolate a figure into
+a sentence, because it is recalculated on every build and cannot fall out
+of step with the data behind it. The rule is against numbers written by
+hand into text that nothing recomputes.
 
 Do not put placeholders into the text. Where a figure does not exist
 yet, leave the sentence out and ask.
@@ -195,6 +206,13 @@ navigation still correct?
 
 ## Before you commit
 
-1. Run the `proofreader` agent over what you wrote.
-2. **Show James the rendered prose and wait.** All written content needs
+1. **Run the `proofreader` agent. This is mandatory, not advisory.** It
+   runs over every prose file the change touches, including generated
+   articles and the strings that produce them. A hand check does not
+   substitute for it, and neither does confidence in the draft.
+   The agent holds no rules of its own. It reads this file, so the two
+   cannot drift, and a rule changed here takes effect on the next run.
+2. Apply the findings, or say which you are rejecting and why. A finding
+   that survives is a defect that ships.
+3. **Show James the rendered prose and wait.** All written content needs
    his approval before it is committed. Generate it, show it, stop.
